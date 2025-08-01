@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { Heart, ThumbsUp } from 'lucide-react-native';
 import { colors, spacing } from '../../styles';
 import { CustomText } from '../common';
 import { formatEngagementCount } from '../../utils';
@@ -20,18 +19,16 @@ const EngagementBar = ({
         onPress={onHeartPress}
         activeOpacity={0.7}
       >
-        <Heart
-          size={18}
-          color={isHeartActive ? colors.heart : colors.gray}
-          fill={isHeartActive ? colors.heart : 'transparent'}
-        />
-        <CustomText
-          variant="caption"
-          color={isHeartActive ? colors.heart : colors.gray}
-          style={styles.engagementCount}
-        >
-          {formatEngagementCount(hearts)}
-        </CustomText>
+        <View style={styles.iconContainer}>
+          <CustomText style={styles.emojiIcon}>🧠</CustomText>
+          <CustomText
+            variant="caption"
+            color={isHeartActive ? colors.heart : colors.textSecondary}
+            style={styles.engagementCount}
+          >
+            {formatEngagementCount(hearts)}
+          </CustomText>
+        </View>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -39,18 +36,16 @@ const EngagementBar = ({
         onPress={onThumbsUpPress}
         activeOpacity={0.7}
       >
-        <ThumbsUp
-          size={18}
-          color={isThumbsUpActive ? colors.thumbsUp : colors.gray}
-          fill={isThumbsUpActive ? colors.thumbsUp : 'transparent'}
-        />
-        <CustomText
-          variant="caption"
-          color={isThumbsUpActive ? colors.thumbsUp : colors.gray}
-          style={styles.engagementCount}
-        >
-          {formatEngagementCount(thumbsUp)}
-        </CustomText>
+        <View style={styles.iconContainer}>
+          <CustomText style={styles.emojiIcon}>👍</CustomText>
+          <CustomText
+            variant="caption"
+            color={isThumbsUpActive ? colors.thumbsUp : colors.textSecondary}
+            style={styles.engagementCount}
+          >
+            {formatEngagementCount(thumbsUp)}
+          </CustomText>
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -65,10 +60,24 @@ const styles = StyleSheet.create({
   engagementButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginRight: spacing.lg,
+    marginRight: spacing.sm,
   },
   engagementCount: {
     marginLeft: spacing.xs,
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  iconContainer: {
+    backgroundColor: '#F0F0F0',
+    borderRadius: 22,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emojiIcon: {
+    fontSize: 14,
   },
 });
 

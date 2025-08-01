@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { colors, spacing } from '../styles';
 import { CustomText, CustomButton } from '../components/common';
+import { Upload, Camera, MessageSquare, PenTool, Target, Eye, TrendingUp, Bookmark, Trash2, MoveRight } from 'lucide-react-native';
 
 const TABS = [
   { key: 'all', label: 'All' },
@@ -55,13 +56,13 @@ const ImproveScreen = () => {
   const [showHidden, setShowHidden] = useState(false);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.safeArea}>
       <View style={{ flex: 1, backgroundColor: colors.background }}>
         {/* Improve Tips Content */}
         {activeTab === 'Improve Tips' && (
-          <ScrollView style={styles.tipsContainer} contentContainerStyle={{paddingBottom: 24}}>
+          <ScrollView style={styles.tipsContainer} contentContainerStyle={{ paddingBottom: 24 }}>
             {/* Tips Tab Bar */}
-            <View style={{marginBottom: 18, marginTop: 8}}>
+            <View style={{ marginBottom: 18, marginTop: 8 }}>
               <ScrollView
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -83,20 +84,21 @@ const ImproveScreen = () => {
               <View key={idx} style={styles.tipCard}>
                 <View style={styles.tipCardContent}>
                   <View style={styles.tipIconWrap}>
-                    <CustomText style={styles.tipIcon}>
-                      {tip.icon === 'upload' && '⤴️'}
-                      {tip.icon === 'photo' && '🖼️'}
-                      {tip.icon === 'chat' && '💬'}
-                      {tip.icon === 'edit' && '✍️'}
-                      {tip.icon === 'target' && '🎯'}
-                    </CustomText>
+                    {tip.icon === 'upload' && <Upload size={26} color={colors.textSecondary} />}
+                    {tip.icon === 'photo' && <Camera size={26} color={colors.textSecondary} />}
+                    {tip.icon === 'chat' && <MessageSquare size={26} color={colors.textSecondary} />}
+                    {tip.icon === 'edit' && <PenTool size={26} color={colors.textSecondary} />}
+                    {tip.icon === 'target' && <Target size={26} color={colors.textSecondary} />}
                   </View>
                   <CustomText style={styles.tipTitle}>{tip.title}</CustomText>
                   <CustomText style={styles.tipDesc}>{tip.desc}</CustomText>
                   <View style={styles.tipFooter}>
                     <CustomText style={styles.tipTag}>{tip.tag}</CustomText>
                     <View style={styles.tipActionBtn}>
-                      <CustomText style={styles.tipActionText}>{tip.action} →</CustomText>
+                      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <CustomText style={styles.tipActionText}>{tip.action}</CustomText>
+                        <MoveRight size={16} color={colors.primary} style={{marginLeft: 4}} />
+                      </View>
                     </View>
                   </View>
                 </View>
@@ -110,7 +112,7 @@ const ImproveScreen = () => {
             >
               <CustomText style={styles.hiddenSectionText}>Hidden Suggestions</CustomText>
               <View style={styles.hiddenEyeWrap}>
-                <CustomText style={styles.hiddenSectionEye}>👁️</CustomText>
+                <Eye size={22} color={colors.gray} style={styles.hiddenSectionEye} />
                 {showHidden && <View style={styles.hiddenEyeSlash} />}
               </View>
             </View>
@@ -138,55 +140,64 @@ const ImproveScreen = () => {
         )}
         {/* Smart Recommendations Cards */}
         {activeTab === 'Smart Recommendations' && (
-          <ScrollView style={styles.tipsContainer} contentContainerStyle={{paddingBottom: 24}}>
+          <ScrollView style={styles.tipsContainer} contentContainerStyle={{ paddingBottom: 24 }}>
             <View style={styles.recommendCardUrgent}>
-              <View style={{width: '100%'}}>
-                <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 8}}>
+              <View style={{ width: '100%' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
                   <View style={styles.recommendCardIconWrap}>
-                    <CustomText style={styles.recommendCardIcon}>💬</CustomText>
+                    <MessageSquare size={24} color={colors.textSecondary} />
                   </View>
-                  <View style={{flex: 1}} />
+                  <View style={{ flex: 1 }} />
                   <View style={styles.recommendCardUrgentBadge}><CustomText style={styles.recommendCardUrgentBadgeText}>Urgent</CustomText></View>
                 </View>
                 <CustomText style={styles.recommendCardTitle}>2 questions had low match scores</CustomText>
                 <CustomText style={styles.recommendCardDesc}>Recent questions about "team hiring" and "product roadmaps" could use better responses</CustomText>
-                <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 8, justifyContent: 'space-between'}}>
-                  <CustomText style={styles.recommendCardAction}>Improve now →</CustomText>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, justifyContent: 'space-between' }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <CustomText style={styles.recommendCardAction}>Improve now</CustomText>
+                    <MoveRight size={18} color={colors.primary} style={{ marginLeft: 4 }} />
+                  </View>
                   <View style={styles.recommendCardActionsRow}>
-                    <CustomText style={styles.recommendCardActionIcon}>🗑️</CustomText>
-                    <CustomText style={styles.recommendCardActionIcon}>🔖</CustomText>
+                    <Bookmark size={18} color={colors.textSecondary} style={{ marginLeft: 12 }} />
+                    <Trash2 size={18} color={colors.textSecondary} style={{ marginLeft: 12 }} />
                   </View>
                 </View>
               </View>
             </View>
             <View style={styles.recommendCard}>
-              <View style={{width: '100%'}}>
-                <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 8}}>
-                  <View style={styles.recommendCardIconWrap}><CustomText style={styles.recommendCardIcon}>📈</CustomText></View>
+              <View style={{ width: '100%' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+                  <View style={styles.recommendCardIconWrap}><TrendingUp size={24} color={colors.textSecondary} /></View>
                 </View>
                 <CustomText style={styles.recommendCardTitle}>AI in education is trending</CustomText>
                 <CustomText style={styles.recommendCardDesc}>This aligns with your expertise. Want to write about it?</CustomText>
-                <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 8, justifyContent: 'space-between'}}>
-                  <CustomText style={styles.recommendCardAction}>Create post →</CustomText>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, justifyContent: 'space-between' }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <CustomText style={styles.recommendCardAction}>Create post</CustomText>
+                    <MoveRight size={18} color={colors.primary} style={{ marginLeft: 4 }} />
+                  </View>
                   <View style={styles.recommendCardActionsRow}>
-                    <CustomText style={styles.recommendCardActionIcon}>🗑️</CustomText>
-                    <CustomText style={styles.recommendCardActionIcon}>🔖</CustomText>
+                    <Bookmark size={18} color={colors.textSecondary} style={{ marginLeft: 12 }} />
+                    <Trash2 size={18} color={colors.textSecondary} style={{ marginLeft: 12 }} />
                   </View>
                 </View>
               </View>
             </View>
             <View style={styles.recommendCard}>
-              <View style={{width: '100%'}}>
-                <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 8}}>
-                  <View style={styles.recommendCardIconWrap}><CustomText style={styles.recommendCardIcon}>🎯</CustomText></View>
+              <View style={{ width: '100%' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
+                  <View style={styles.recommendCardIconWrap}><Target size={24} color={colors.textSecondary} /></View>
                 </View>
                 <CustomText style={styles.recommendCardTitle}>Session saved 10x this week</CustomText>
                 <CustomText style={styles.recommendCardDesc}>Your "Startup Fundraising" session is popular. Consider highlighting it.</CustomText>
-                <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 8, justifyContent: 'space-between'}}>
-                  <CustomText style={styles.recommendCardAction}>Highlight →</CustomText>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, justifyContent: 'space-between' }}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <CustomText style={styles.recommendCardAction}>Highlight</CustomText>
+                    <MoveRight size={18} color={colors.primary} style={{ marginLeft: 4 }} />
+                  </View>
                   <View style={styles.recommendCardActionsRow}>
-                    <CustomText style={styles.recommendCardActionIcon}>🗑️</CustomText>
-                    <CustomText style={styles.recommendCardActionIcon}>🔖</CustomText>
+                    <Bookmark size={18} color={colors.textSecondary} style={{ marginLeft: 12 }} />
+                    <Trash2 size={18} color={colors.textSecondary} style={{ marginLeft: 12 }} />
                   </View>
                 </View>
               </View>
@@ -216,6 +227,12 @@ const ImproveScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: colors.background,
+    paddingTop: 24,
+    marginTop: 15,
+  },
   recommendCard: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -223,7 +240,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     marginHorizontal: 12,
-    marginBottom: 18,
+    marginBottom: 15,
     shadowColor: '#1A1A1A',
     shadowOpacity: 0.04,
     shadowRadius: 12,
@@ -231,7 +248,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E6E8EC',
     position: 'relative',
-    
   },
   recommendCardUrgent: {
     flexDirection: 'row',
@@ -240,7 +256,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     marginHorizontal: 12,
-    marginBottom: 18,
+    marginBottom: 15,
     shadowColor: '#1A1A1A',
     shadowOpacity: 0.04,
     shadowRadius: 12,
@@ -248,18 +264,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#FFD6D6',
     position: 'relative',
-    marginTop: 10,
+    marginTop: 20,
   },
   recommendCardIconWrap: {
     width: 44,
     height: 44,
-    borderRadius: 22,
-    backgroundColor: '#F4F5F7',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
-    borderWidth: 1,
-    borderColor: '#E6E8EC',
   },
   recommendCardIcon: {
     fontSize: 24,
@@ -283,9 +295,9 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   recommendCardAction: {
-    color: '#7B61FF',
+    color: colors.primary,
     fontWeight: '500',
-    fontSize: 14,
+    fontSize: 16,
   },
   recommendCardActionsRow: {
     flexDirection: 'row',
@@ -390,14 +402,14 @@ const styles = StyleSheet.create({
     borderColor: '#F0F1F3',
   },
   hiddenSectionText: {
-    color: colors.textSecondary,
+    color: colors.gray,
     fontWeight: '600',
     fontSize: 16,
   },
   hiddenSectionEye: {
     fontSize: 22,
     color: colors.textSecondary,
-    opacity: 0.7,
+    opacity: 1,
   },
   container: {
     flex: 1,
@@ -445,13 +457,12 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 4,
     marginHorizontal: 8,
-    marginBottom: 5,
     marginTop: 6,
   },
   tipsTabBtn: {
     paddingHorizontal: 16,
-    paddingVertical: 7,
-    borderRadius: 14,
+    paddingVertical: 5,
+    borderRadius: 22,
     marginRight: 8,
     backgroundColor: colors.background,
     borderWidth: 1,
@@ -488,6 +499,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#E6E8EC',
     position: 'relative',
+    borderLeftWidth: 4,
+    borderLeftColor: '#7B8493',
   },
   tipCardContent: {
     flexDirection: 'column',
@@ -539,10 +552,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
   },
   tipActionBtn: {
-    backgroundColor: '#F4F8FF',
+    backgroundColor: colors.tagsbg,
     borderRadius: 16,
-    paddingHorizontal: 16,
-    paddingVertical: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
     flexDirection: 'row',
     alignItems: 'center',
     minWidth: 90,
@@ -551,9 +564,9 @@ const styles = StyleSheet.create({
     borderColor: '#E6E8EC',
   },
   tipActionText: {
-    color: '#7B61FF',
+    color: colors.primary,
     fontWeight: '500',
-    fontSize: 15,
+    fontSize: 13,
     letterSpacing: 0.1,
   },
   tipClose: {
@@ -577,18 +590,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.04,
     shadowRadius: 2,
     elevation: 1,
-    
-    
+
+
   },
   segmentedBtnText: {
     color: colors.textSecondary,
     fontWeight: '500',
-    fontSize: 15,
+    fontSize: 14,
   },
   segmentedBtnTextActive: {
     color: colors.textPrimary,
     fontWeight: 'bold',
-    fontSize: 15,
+    fontSize: 14,
   },
 });
 

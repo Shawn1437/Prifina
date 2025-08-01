@@ -3,12 +3,13 @@ import React, { useState } from 'react';
 import { View, StyleSheet, SafeAreaView, FlatList, TextInput, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
 import { colors, spacing } from '../styles';
 import { CustomText, CustomButton, KnowledgeCard } from '../components/common';
+import { Pin, Mic, Upload, Camera, Tag } from 'lucide-react-native';
 
 const mockQuestions = [
   {
     id: '1',
     title: "How can I improve my startup's product-market fit?",
-    description: 'Product-market fit requires continuous iteration based on customer feedback. Sta...',
+    description: 'Product-market fit requires continuous iteration based on customer feedback. Start by identifying your core value proposition and validate it with real users. Focus on retention metrics rather than just acquisition - if users aren\'t coming back, you haven\'t achieved PMF yet. The key is to build something people want so badly they tell their friends about it. This means deeply understanding your target customer\'s pain points and creating a solution that\'s 10x better than existing alternatives.',
     pinned: true,
     timeAgo: '2 hours ago',
     knowledgeAdded: false,
@@ -16,7 +17,7 @@ const mockQuestions = [
   {
     id: '2',
     title: 'What are the key metrics for SaaS businesses?',
-    description: 'The most critical SaaS metrics include Monthly Recurring Revenue (MRR), ...',
+    description: 'The most critical SaaS metrics include Monthly Recurring Revenue (MRR), Customer Acquisition Cost (CAC), Customer Lifetime Value (CLV), and churn rate. Track your MRR growth rate month-over-month, ensuring it\'s accelerating. Your CLV should be at least 3x your CAC for a healthy business model. Monitor both gross and net revenue retention - aim for net retention above 100%. Also track activation metrics, time to value, and expansion revenue from existing customers. Weekly cohort analysis helps identify trends early.',
     pinned: true,
     timeAgo: '1 day ago',
     knowledgeAdded: true,
@@ -24,7 +25,7 @@ const mockQuestions = [
   {
     id: '3',
     title: 'How do I pitch to investors effectively?',
-    description: 'A compelling investor pitch tells a story: problem, solution, market opportunity, ...',
+    description: 'A compelling investor pitch tells a story: problem, solution, market opportunity, traction, business model, competition, team, and financials. Start with a hook that captures attention immediately. Clearly articulate the pain point you\'re solving and why it matters now. Show impressive traction metrics and growth trajectory. Explain your go-to-market strategy and unit economics. Address competition honestly but position your unique advantages. Highlight your team\'s domain expertise and execution track record. End with a clear ask and use of funds.',
     pinned: true,
     timeAgo: '2 days ago',
     knowledgeAdded: false,
@@ -41,9 +42,14 @@ const AddNewScreen = () => {
   const [content, setContent] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
   const [inputType, setInputType] = useState('Text');
+  const [pinnedQuestions, setPinnedQuestions] = useState(mockQuestions);
 
   const handleAddKnowledge = (id) => {
     setActiveTab('New Entry');
+  };
+
+  const handleUnpin = (id) => {
+    setPinnedQuestions(prev => prev.filter(item => item.id !== id));
   };
 
   const handleTagPress = (tag) => {
@@ -60,24 +66,44 @@ const AddNewScreen = () => {
       timeAgo={item.timeAgo}
       knowledgeAdded={item.knowledgeAdded}
       onAddKnowledge={() => handleAddKnowledge(item.id)}
+      onUnpin={() => handleUnpin(item.id)}
     />
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
-      {activeTab === 'Pinned' && (
-        <FlatList
-          data={mockQuestions}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          contentContainerStyle={{ paddingVertical: spacing.md, paddingBottom: 80 }}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
-      {activeTab === 'New Entry' && (
-        <>
-          <ScrollView contentContainerStyle={[styles.formContainer, { backgroundColor: '#fff', borderRadius: 12 }]} keyboardShouldPersistTaps="handled">
+      <View style={styles.content}>
+        {activeTab === 'Pinned' && (
+          <>
+            {pinnedQuestions.length > 0 ? (
+              <FlatList
+                data={pinnedQuestions}
+                renderItem={renderItem}
+                keyExtractor={item => item.id}
+                contentContainerStyle={styles.listContent}
+                showsVerticalScrollIndicator={false}
+              />
+            ) : (
+              <View style={styles.emptyContainer}>
+                <View style={styles.emptyIconContainer}>
+                  <Pin size={48} color="#C1C7CD" />
+                </View>
+                <CustomText style={styles.emptyTitle}>No Pinned Interactions</CustomText>
+                <CustomText style={styles.emptyDescription}>
+                  Pin interactions from the Feeds tab to improve{'\n'}your AI twin's responses
+                </CustomText>
+              </View>
+            )}
+          </>
+        )}
+        {activeTab === 'New Entry' && (
+          <>
+            <ScrollView 
+              contentContainerStyle={styles.formContainer} 
+              keyboardShouldPersistTaps="handled"
+              showsVerticalScrollIndicator={false}
+            >
             <CustomText style={styles.label}>Title (Optional)</CustomText>
             <TextInput
               style={styles.input}
@@ -90,7 +116,7 @@ const AddNewScreen = () => {
   <View style={styles.voiceContainer}>
     <CustomText style={styles.voiceLabel}>Voice Recording</CustomText>
     <View style={styles.voiceBox}>
-      <CustomText style={styles.voiceMicIcon}>🎤</CustomText>
+      <Mic size={48} color="#9CA3AF" style={styles.voiceMicIcon} />
       <CustomText style={styles.voicePrompt}>Tap to start recording</CustomText>
       <TouchableOpacity style={styles.voiceRecordBtn}>
         <CustomText style={styles.voiceRecordBtnText}>Start Recording</CustomText>
@@ -101,7 +127,7 @@ const AddNewScreen = () => {
   <View style={styles.fileContainer}>
     <CustomText style={styles.fileLabel}>File Upload</CustomText>
     <View style={styles.fileBox}>
-      <CustomText style={styles.fileIcon}>⬆️</CustomText>
+      <Upload size={48} color="#9CA3AF" style={styles.fileIcon} />
       <CustomText style={styles.filePrompt}>Tap to select files</CustomText>
       <TouchableOpacity style={styles.fileSelectBtn}>
         <CustomText style={styles.fileSelectBtnText}>Select Files</CustomText>
@@ -112,7 +138,7 @@ const AddNewScreen = () => {
   <View style={styles.cameraContainer}>
     <CustomText style={styles.cameraLabel}>Camera Capture</CustomText>
     <View style={styles.cameraBox}>
-      <CustomText style={styles.cameraIcon}>📷</CustomText>
+      <Camera size={48} color="#9CA3AF" style={styles.cameraIcon} />
       <CustomText style={styles.cameraPrompt}>Tap to take photo</CustomText>
       <TouchableOpacity style={styles.cameraBtn}>
         <CustomText style={styles.cameraBtnText}>Take Photo</CustomText>
@@ -147,16 +173,26 @@ const AddNewScreen = () => {
                 </TouchableOpacity>
               ))}
             </View>
-            <View style={{ height: 140 }} />
+            <View style={styles.spacer} />
           </ScrollView>
           <View style={styles.bottomEntryBar}>
             <View style={styles.inputTypeBar}>
-              {['Text', 'Voice', 'File', 'Camera'].map(type => (
+              {[
+                { type: 'Text', icon: Tag },
+                { type: 'Voice', icon: Mic },
+                { type: 'File', icon: Upload },
+                { type: 'Camera', icon: Camera }
+              ].map(({ type, icon: Icon }) => (
                 <TouchableOpacity
                   key={type}
                   style={[styles.inputTypeButton, inputType === type && styles.inputTypeButtonActive]}
                   onPress={() => setInputType(type)}
                 >
+                  <Icon 
+                    size={20} 
+                    color={inputType === type ? '#3B82F6' : '#B0B0B0'} 
+                    style={styles.inputTypeIcon}
+                  />
                   <CustomText style={[styles.inputTypeText, inputType === type && styles.inputTypeTextActive]}>{type}</CustomText>
                 </TouchableOpacity>
               ))}
@@ -188,6 +224,7 @@ const AddNewScreen = () => {
           </View>
         </View>
       </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -195,12 +232,47 @@ const AddNewScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
-    // Removed marginTop to avoid extra space at the top
+    backgroundColor: '#FFFFFF',
+    marginTop: 10,
+  },
+  content: {
+    flex: 1,
+    paddingTop: spacing.lg, // Add more top padding to prevent content from hiding under notch
+  },
+  listContent: {
+    paddingVertical: spacing.md,
+    paddingBottom: 140, // Space for bottom tabs
+    paddingHorizontal: spacing.sm,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingTop: spacing.xl * 3,
+    paddingHorizontal: spacing.lg,
+  },
+  emptyIconContainer: {
+    marginBottom: spacing.lg,
+  },
+  emptyTitle: {
+    color: colors.textPrimary,
+    fontSize: 18,
+    fontWeight: '800',
+    marginBottom: spacing.sm,
+    textAlign: 'center',
+  },
+  emptyDescription: {
+    color: colors.textSecondary,
+    fontSize: 16,
+    textAlign: 'center',
+    lineHeight: 22,
   },
   formContainer: {
-    padding: 16,
-    paddingBottom: 80, // reduced to avoid excessive bottom space
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    margin: spacing.md,
+    padding: spacing.md,
+    paddingBottom: 160, // Space for bottom elements
   },
   label: {
     fontWeight: '600',
@@ -227,6 +299,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginVertical: 8,
+  },
+  spacer: {
+    height: 140,
   },
   tag: {
     backgroundColor: '#F3F4F6',
@@ -260,8 +335,13 @@ const styles = StyleSheet.create({
   inputTypeButton: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 8,
+    justifyContent: 'center',
+    paddingVertical: 10,
     borderRadius: 8,
+    flexDirection: 'row',
+  },
+  inputTypeIcon: {
+    paddingHorizontal: 14,
   },
   inputTypeButtonActive: {
     backgroundColor: '#fff',
@@ -277,8 +357,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   inputTypeTextActive: {
-    color: '#222',
-    fontWeight: '700',
+    color: '#3B82F6',
+    fontWeight: '600',
+    fontSize: 15,
   },
   bottomEntryBar: {
     backgroundColor: '#fff',
@@ -371,8 +452,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   voiceMicIcon: {
-    fontSize: 20,
-    color: '#9CA3AF',
     marginBottom: 10,
   },
   voicePrompt: {
@@ -413,8 +492,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   fileIcon: {
-    fontSize: 20,
-    color: '#3B82F6',
     marginBottom: 10,
   },
   filePrompt: {
@@ -424,7 +501,7 @@ const styles = StyleSheet.create({
   },
   fileSelectBtn: {
     backgroundColor: '#3B82F6',
-    borderRadius: 20,
+    borderRadius: 10,
     paddingHorizontal: 28,
     paddingVertical: 10,
     alignItems: 'center',
@@ -456,9 +533,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cameraIcon: {
-    fontSize: 25,
-    color: '#60A5FA',
-    marginBottom: 10,
+    marginBottom: 8,
   },
   cameraPrompt: {
     color: '#9CA3AF',
@@ -466,8 +541,8 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   cameraBtn: {
-    backgroundColor: '#2563EB',
-    borderRadius: 20,
+    backgroundColor: '#3B82F6',
+    borderRadius: 10,
     paddingHorizontal: 28,
     paddingVertical: 10,
     alignItems: 'center',

@@ -3,27 +3,32 @@ import React from 'react';
 import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { colors } from '../styles';
 import { CustomText } from '../components/common';
+import { MessageSquare, Users, Clock, Heart } from 'lucide-react-native';
 
 const metrics = [
   {
     label: 'Total Interactions',
     value: '1,247',
     change: '+23%',
+    icon: MessageSquare,
   },
   {
     label: 'Unique Users',
     value: '342',
     change: '+15%',
+    icon: Users,
   },
   {
     label: 'Avg Session',
     value: '4.2m',
     change: '',
+    icon: Clock,
   },
   {
     label: 'Total Reactions',
     value: '89',
     change: '+8%',
+    icon: Heart,
   },
 ];
 
@@ -35,18 +40,26 @@ const UsageScreen = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={{ padding: 20 }} showsVerticalScrollIndicator={false}>
         <View style={styles.metricsRow}>
-          {metrics.map((m, i) => (
-            <View key={m.label} style={styles.metricCard}>
-              <View style={styles.metricHeader}>
-                {m.change ? (
-                  <CustomText style={styles.metricChange}>{m.change}</CustomText>
-                ) : <View style={{ height: 18 }} />}
+          {metrics.map((m, i) => {
+            const Icon = m.icon;
+            return (
+              <View key={m.label} style={styles.metricCard}>
+                <View style={styles.metricHeaderRow}>
+                  <View style={styles.metricIconRow}>
+                    <Icon size={28} color={colors.gray} />
+                  </View>
+                  <View style={{ flex: 1 }} />
+                  {m.change ? (
+                    <CustomText style={styles.metricChange}>{m.change}</CustomText>
+                  ) : <View style={{ height: 18, width: 44 }} />}
+                </View>
+                <CustomText style={styles.metricValue}>{m.value}</CustomText>
+                <CustomText style={styles.metricLabel}>{m.label}</CustomText>
               </View>
-              <CustomText style={styles.metricValue}>{m.value}</CustomText>
-              <CustomText style={styles.metricLabel}>{m.label}</CustomText>
-            </View>
-          ))}
+            );
+          })}
         </View>
+
         <View style={styles.chartCard}>
           <CustomText style={styles.chartTitle}>Daily Interactions (Last 7 Days)</CustomText>
           <View style={styles.barChart}>
@@ -189,7 +202,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    marginTop:10
+    marginTop:40
   },
   metricsRow: {
     flexDirection: 'row',
@@ -210,10 +223,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#F0F1F3',
   },
-  metricHeader: {
+  metricHeaderRow: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
     marginBottom: 8,
+    gap: 0,
   },
   metricChange: {
     color: colors.primary,
@@ -230,6 +245,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: colors.textPrimary,
     marginBottom: 2,
+    marginTop: 12,
   },
   metricLabel: {
     color: colors.textSecondary,
@@ -389,12 +405,15 @@ const styles = StyleSheet.create({
     width: '23%',
     backgroundColor: '#F8F9FB',
     borderRadius: 12,
-    paddingVertical: 12,
+    paddingVertical: 18,
+    minHeight: 80,
     marginBottom: 10,
   },
   reactionEmoji: {
-    fontSize: 2,
-    marginBottom: 4,
+    fontSize: 22,
+    marginBottom: 8,
+    textAlign: 'center',
+    width: '100%',
   },
   reactionCount: {
     fontWeight: 'bold',
@@ -481,6 +500,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
   },
+  metricIconRow: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    marginRight: 0,
+    marginTop: 0,
+  },
+
 });
 
 export default UsageScreen;

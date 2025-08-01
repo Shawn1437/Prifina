@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { Bookmark } from 'lucide-react-native';
+import { Pin } from 'lucide-react-native';
 import { colors, spacing } from '../../styles';
 import { CustomText } from '../common';
 import EngagementBar from './EngagementBar';
@@ -52,7 +52,7 @@ const FeedPost = ({
           onPress={handleBookmarkPress}
           style={styles.bookmarkButton}
         >
-          <Bookmark
+          <Pin
             size={20}
             color={post.isBookmarked ? colors.primary : colors.gray}
             fill={post.isBookmarked ? colors.primary : 'transparent'}

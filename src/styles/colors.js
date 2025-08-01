@@ -1,5 +1,6 @@
 export const colors = {
   primary: '#007AFF',
+  tagsbg: '#eaf2faff',
   secondary: '#34C759',
   background: '#F2F2F7',
   white: '#FFFFFF',
@@ -11,4 +12,5 @@ export const colors = {
   accent: '#FF9500',
   heart: '#FF3B30',
   thumbsUp: '#FF9500',
+  subTitle: '#7B61FF'
 };

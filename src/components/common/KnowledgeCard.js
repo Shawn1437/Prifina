@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { colors, spacing } from '../../styles';
 import CustomText from './CustomText';
 import CustomButton from './CustomButton';
-import { Bookmark } from 'lucide-react-native';
+import { Pin, Plus, ChevronDown, ChevronUp } from 'lucide-react-native';
 
 const KnowledgeCard = ({
   title,
@@ -12,47 +12,72 @@ const KnowledgeCard = ({
   timeAgo,
   knowledgeAdded,
   onAddKnowledge,
+  onUnpin,
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleCardPress = () => {
+    setIsExpanded(!isExpanded);
+  };
   return (
-    <View style={styles.card}>
+    <TouchableOpacity style={styles.card} onPress={handleCardPress} activeOpacity={0.7}>
       <View style={styles.header}>
         <CustomText variant="postTitle" style={styles.title} numberOfLines={2}>
           {title}
         </CustomText>
-        {pinned && (
-          <Bookmark
-            size={20}
-            color={colors.primary}
-            fill={colors.primary}
-            style={styles.pinIcon}
-          />
-        )}
+        <View style={styles.iconContainer}>
+          {isExpanded ? (
+            <ChevronUp size={20} color={colors.textSecondary} style={styles.chevronIcon} />
+          ) : (
+            <ChevronDown size={20} color={colors.textSecondary} style={styles.chevronIcon} />
+          )}
+          {pinned && (
+            <TouchableOpacity onPress={(e) => {
+              e.stopPropagation();
+              onUnpin();
+            }} style={styles.pinContainer}>
+              <Pin
+                size={20}
+                color={colors.primary}
+                fill={colors.primary}
+                style={styles.pinIcon}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
-      <CustomText variant="postContent" style={styles.description} numberOfLines={2}>
+      <CustomText 
+        variant="postContent" 
+        style={styles.description} 
+        numberOfLines={isExpanded ? undefined : 2}
+      >
         {description}
       </CustomText>
-      <View style={styles.footer}>
+      <View style={[styles.footer, knowledgeAdded && styles.footerWithKnowledge]}>
         <CustomText variant="timestamp" style={styles.timeAgo}>
           {timeAgo}
         </CustomText>
-        {knowledgeAdded ? (
+        {knowledgeAdded && (
           <View style={styles.knowledgeAddedBox}>
             <CustomText variant="caption" style={styles.knowledgeAddedText}>
               Knowledge Added
             </CustomText>
           </View>
-        ) : (
-          <CustomButton
-            title="+ Add Knowledge"
-            onPress={onAddKnowledge}
-            variant="outline"
-            size="small"
-            style={styles.addButton}
-            textStyle={styles.addButtonText}
-          />
         )}
       </View>
-    </View>
+      {!knowledgeAdded && (
+        <TouchableOpacity 
+          style={styles.addKnowledgeButton} 
+          onPress={(e) => {
+            e.stopPropagation();
+            onAddKnowledge();
+          }}
+        >
+          <Plus size={16} color="#4285F4" style={styles.plusIcon} />
+          <CustomText style={styles.addKnowledgeButtonText}>Add Knowledge</CustomText>
+        </TouchableOpacity>
+      )}
+    </TouchableOpacity>
   );
 };
 
@@ -79,6 +104,18 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: spacing.sm,
   },
+  iconContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  chevronIcon: {
+    marginBottom: spacing.xs,
+    marginLeft: spacing.sm,
+  },
+  pinContainer: {
+    padding: spacing.xs,
+    borderRadius: 4,
+  },
   pinIcon: {
     marginLeft: spacing.sm,
     marginTop: 2,
@@ -91,30 +128,41 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginBottom: spacing.md,
+  },
+  footerWithKnowledge: {
+    marginBottom: 0,
   },
   timeAgo: {
     color: colors.textSecondary,
   },
   knowledgeAddedBox: {
-    backgroundColor: colors.secondary,
-    borderRadius: 8,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
+    backgroundColor: '#4CAF50',
+    borderRadius: 16,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
   },
   knowledgeAddedText: {
-    color: colors.white,
+    color: '#FFFFFF',
     fontWeight: '600',
-    fontSize: 13,
+    fontSize: 12,
   },
-  addButton: {
-    minWidth: 120,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
+  addKnowledgeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#E8F0FE',
     borderRadius: 8,
-    height: 32,
+    paddingVertical: 6,
+    paddingHorizontal: 16,
+    width: '100%',
   },
-  addButtonText: {
-    fontSize: 14,
+  plusIcon: {
+    marginRight: 8,
+  },
+  addKnowledgeButtonText: {
+    color: '#4285F4',
+    fontSize: 15,
     fontWeight: '600',
   },
 });

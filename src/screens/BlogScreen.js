@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Switch, TextInput } from 'react-native';
 import { colors, spacing } from '../styles';
 import { CustomText, CustomButton } from '../components/common';
+import { Trash2, CreditCard, Send, Link as LinkIcon, EyeOff, Plus } from 'lucide-react-native';
 
 const mockDrafts = [
   {
@@ -33,6 +34,19 @@ const mockDrafts = [
     tags: ['SaaS', 'Growth', 'Metrics'],
     type: 'Educational',
     status: 'draft',
+  },
+];
+
+const mockPublished = [
+  {
+    id: '1',
+    title: 'Why Most Startups Fail at Fundraising',
+    timeAgo: '1 week ago',
+  },
+  {
+    id: '2',
+    title: 'The Rise of No-Code Solutions in 2024',
+    timeAgo: '2 weeks ago',
   },
 ];
 
@@ -120,7 +134,7 @@ const BlogScreen = () => {
             <View style={styles.trackedHeader}>
               <CustomText style={styles.trackedTitle}>Tracked Topics</CustomText>
               <TouchableOpacity style={styles.trackedAddBtn}>
-                <CustomText style={styles.trackedAddBtnText}>+</CustomText>
+                <Plus size={20} color={colors.primary} />
               </TouchableOpacity>
             </View>
             <View style={styles.topicCard}>
@@ -148,7 +162,7 @@ const BlogScreen = () => {
                     styles.card,
                     { marginHorizontal: 16 },
                     idx === 0 && { marginTop: 20 },
-                    idx === mockDrafts.length - 1 && { marginBottom: 40 }
+                    idx === mockDrafts.length - 1 && { marginBottom: 20 }
                   ]}
                 >
                   <CustomText style={styles.title}>{item.title}</CustomText>
@@ -162,9 +176,31 @@ const BlogScreen = () => {
                   </View>
                   <CustomText style={styles.type}>{item.type}</CustomText>
                   <View style={styles.cardActions}>
-                    <CustomButton title="Edit" style={styles.editBtn} textStyle={{ color: '#000', fontWeight: 'bold' }} />
-                    <CustomButton title="Publish" style={styles.publishBtn} textStyle={{ color: '#fff', fontWeight: 'bold' }} />
-                    <CustomButton title="Delete" style={styles.deleteBtn} textStyle={{ color: '#000', fontWeight: 'bold' }} />
+                    <CustomButton
+                      style={styles.editBtn}
+                      textStyle={styles.editBtnText}
+                      title={null}
+                      children={
+                        <View style={styles.iconTextRow}>
+                          <CreditCard size={18} color="#8E8E93" style={styles.iconMarginRight} />
+                          <CustomText style={styles.editBtnText}>Edit</CustomText>
+                        </View>
+                      }
+                    />
+                    <CustomButton
+                      style={styles.publishBtn}
+                      textStyle={styles.publishBtnText}
+                      title={null}
+                      children={
+                        <View style={styles.iconTextRow}>
+                          <Send size={18} color="#fff" style={styles.iconMarginRight} />
+                          <CustomText style={styles.publishBtnText}>Publish</CustomText>
+                        </View>
+                      }
+                    />
+                    <TouchableOpacity style={styles.deleteBtn}>
+                      <Trash2 size={20} color="#EF4444" />
+                    </TouchableOpacity>
                   </View>
                 </View>
               ))}
@@ -172,22 +208,34 @@ const BlogScreen = () => {
           )}
           {activeTab === 'Published' && (
             <View style={styles.draftsList}>
-              <View style={[styles.publishedCard, { marginHorizontal: 16, marginTop: 20 }]}> 
-                <CustomText style={styles.publishedTitle}>Why Most Startups Fail at Fundraising</CustomText>
-                <CustomText style={styles.publishedTime}>1 week ago</CustomText>
-                <View style={styles.publishedActions}>
-                  <TouchableOpacity style={styles.linkBtn}><CustomText style={styles.linkBtnText}>Copy Link</CustomText></TouchableOpacity>
-                  <TouchableOpacity style={styles.unpublishBtn}><CustomText style={styles.unpublishBtnText}>Unpublish</CustomText></TouchableOpacity>
+              {mockPublished.map((item, idx) => (
+                <View
+                  key={item.id}
+                  style={[
+                    styles.publishedCard,
+                    { marginHorizontal: 16 },
+                    idx === 0 && { marginTop: 20 },
+                    idx === mockPublished.length - 1 && { marginBottom: 40 }
+                  ]}
+                >
+                  <CustomText style={styles.publishedTitle}>{item.title}</CustomText>
+                  <CustomText style={styles.publishedTime}>{item.timeAgo}</CustomText>
+                  <View style={styles.publishedActions}>
+                    <TouchableOpacity style={styles.linkBtn}>
+                      <View style={styles.iconTextRow}>
+                        <LinkIcon size={16} color={colors.primary} style={styles.iconMarginRight} />
+                        <CustomText style={styles.linkBtnText}>Copy Link</CustomText>
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.unpublishBtn}>
+                      <View style={styles.iconTextRow}>
+                        <EyeOff size={16} color={colors.textSecondary} style={styles.iconMarginRight} />
+                        <CustomText style={styles.unpublishBtnText}>Unpublish</CustomText>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-              <View style={[styles.publishedCard, { marginHorizontal: 16, marginBottom: 40 }]}> 
-                <CustomText style={styles.publishedTitle}>The Rise of No-Code Solutions in 2024</CustomText>
-                <CustomText style={styles.publishedTime}>2 weeks ago</CustomText>
-                <View style={styles.publishedActions}>
-                  <TouchableOpacity style={styles.linkBtn}><CustomText style={styles.linkBtnText}>Copy Link</CustomText></TouchableOpacity>
-                  <TouchableOpacity style={styles.unpublishBtn}><CustomText style={styles.unpublishBtnText}>Unpublish</CustomText></TouchableOpacity>
-                </View>
-              </View>
+              ))}
             </View>
           )}
         </ScrollView>
@@ -225,6 +273,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
     // marginTop:40 // removed to avoid extra top space
+    marginTop: 40,
   },
   settingsCard: {
     backgroundColor: '#fff',
@@ -294,8 +343,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   autoDraftBtn: {
-    paddingHorizontal: 18,
-    paddingVertical: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
     borderRadius: 20,
     backgroundColor: '#F4F6FA',
     minWidth: 54,
@@ -307,7 +356,7 @@ const styles = StyleSheet.create({
   },
   autoDraftBtnText: {
     color: '#6B7280',
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '500',
   },
   autoDraftBtnTextActive: {
@@ -337,7 +386,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 16,
     padding: 18,
-    marginBottom: 40,
+    marginBottom: 80,
     marginHorizontal: 24,
     shadowColor: '#000',
     shadowOpacity: 0.06,
@@ -358,10 +407,6 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
   trackedAddBtn: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#F4F5F7',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -393,7 +438,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 16,
     padding: 18,
-    marginBottom: 18,
+    marginBottom: 32,
     shadowColor: '#000',
     shadowOpacity: 0.06,
     shadowRadius: 8,
@@ -416,7 +461,6 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#F4F5F7',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -470,7 +514,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   linkBtn: {
-    backgroundColor: '#F4F8FF',
+    backgroundColor: colors.tagsbg,
     borderRadius: 8,
     paddingHorizontal: 14,
     paddingVertical: 8,
@@ -571,11 +615,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 16,
     padding: 16,
-    marginBottom: 16,
     shadowColor: '#000',
     shadowOpacity: 0.04,
     shadowRadius: 4,
     elevation: 2,
+    marginTop: 20,
   },
   title: {
     fontWeight: 'bold',
@@ -584,7 +628,7 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
   subtitle: {
-    color: colors.primary,
+    color: colors.subTitle,
     fontSize: 13,
     marginBottom: 2,
   },
@@ -605,7 +649,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   tag: {
-    backgroundColor: '#F4F5F7',
+    backgroundColor: colors.tagsbg,
     borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 2,
@@ -613,7 +657,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   tagText: {
-    color: colors.textSecondary,
+    color: colors.primary,
     fontSize: 12,
   },
   type: {
@@ -629,18 +673,39 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   editBtn: {
-    flex: 1,
+    padding: 10,
     marginRight: 8,
     backgroundColor: '#F4F5F7',
+  },
+  editBtnText: {
+    color: '#8E8E93',
+    fontWeight: '600',
   },
   publishBtn: {
     flex: 2,
     marginRight: 8,
     backgroundColor: colors.primary,
   },
+  publishBtnText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  iconTextRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconMarginRight: {
+    marginRight: 6,
+  },
   deleteBtn: {
-    flex: 1,
+    
     backgroundColor: '#F4F5F7',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 8,
+    borderRadius: 8,
+    paddingHorizontal: 10,
   },
   bottomButtonContainer: {
     padding: 16,
