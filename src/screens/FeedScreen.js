@@ -5,6 +5,7 @@ import {
   FlatList,
   StyleSheet,
   RefreshControl,
+  StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Pin, Clock4, MessageSquare } from 'lucide-react-native';
@@ -147,6 +148,7 @@ const FeedScreen = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       {activeTab === 'Live Feed' && (
         <FlatList
           data={posts}

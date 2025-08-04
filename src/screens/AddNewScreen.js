@@ -72,7 +72,7 @@ const AddNewScreen = () => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+      <StatusBar barStyle="dark-content" backgroundColor="rgba(255, 255, 255, 1)" />
       <View style={styles.content}>
         {activeTab === 'Pinned' && (
           <>
@@ -99,131 +99,131 @@ const AddNewScreen = () => {
         )}
         {activeTab === 'New Entry' && (
           <>
-            <ScrollView 
-              contentContainerStyle={styles.formContainer} 
+            <ScrollView
+              contentContainerStyle={styles.formContainer}
               keyboardShouldPersistTaps="handled"
               showsVerticalScrollIndicator={false}
             >
-            <CustomText style={styles.label}>Title (Optional)</CustomText>
-            <TextInput
-              style={styles.input}
-              placeholder="Brief title for this knowledge..."
-              placeholderTextColor="#B0B0B0"
-              value={title}
-              onChangeText={setTitle}
-            />
-{inputType === 'Voice' ? (
-  <View style={styles.voiceContainer}>
-    <CustomText style={styles.voiceLabel}>Voice Recording</CustomText>
-    <View style={styles.voiceBox}>
-      <Mic size={48} color="#9CA3AF" style={styles.voiceMicIcon} />
-      <CustomText style={styles.voicePrompt}>Tap to start recording</CustomText>
-      <TouchableOpacity style={styles.voiceRecordBtn}>
-        <CustomText style={styles.voiceRecordBtnText}>Start Recording</CustomText>
-      </TouchableOpacity>
-    </View>
-  </View>
-) : inputType === 'File' ? (
-  <View style={styles.fileContainer}>
-    <CustomText style={styles.fileLabel}>File Upload</CustomText>
-    <View style={styles.fileBox}>
-      <Upload size={48} color="#9CA3AF" style={styles.fileIcon} />
-      <CustomText style={styles.filePrompt}>Tap to select files</CustomText>
-      <TouchableOpacity style={styles.fileSelectBtn}>
-        <CustomText style={styles.fileSelectBtnText}>Select Files</CustomText>
-      </TouchableOpacity>
-    </View>
-  </View>
-) : inputType === 'Camera' ? (
-  <View style={styles.cameraContainer}>
-    <CustomText style={styles.cameraLabel}>Camera Capture</CustomText>
-    <View style={styles.cameraBox}>
-      <Camera size={48} color="#9CA3AF" style={styles.cameraIcon} />
-      <CustomText style={styles.cameraPrompt}>Tap to take photo</CustomText>
-      <TouchableOpacity style={styles.cameraBtn}>
-        <CustomText style={styles.cameraBtnText}>Take Photo</CustomText>
-      </TouchableOpacity>
-    </View>
-  </View>
-) : (
-  <>
-    <CustomText style={styles.label}>Knowledge Content</CustomText>
-    <TextInput
-      style={[styles.input, styles.textArea]}
-      placeholder="Share your insights, experience, or expertise..."
-      placeholderTextColor="#B0B0B0"
-      value={content}
-      onChangeText={setContent}
-      multiline
-      numberOfLines={5}
-    />
-  </>
-)}
-
- 
-            <CustomText style={styles.label}>Tags</CustomText>
-            <View style={styles.tagsContainer}>
-              {TAGS.map(tag => (
-                <TouchableOpacity
-                  key={tag}
-                  style={[styles.tag, selectedTags.includes(tag) && styles.tagSelected]}
-                  onPress={() => handleTagPress(tag)}
-                >
-                  <CustomText style={[styles.tagText, selectedTags.includes(tag) && styles.tagTextSelected]}>{tag}</CustomText>
-                </TouchableOpacity>
-              ))}
-            </View>
-            <View style={styles.spacer} />
-          </ScrollView>
-          <View style={styles.bottomEntryBar}>
-            <View style={styles.inputTypeBar}>
-              {[
-                { type: 'Text', icon: Tag },
-                { type: 'Voice', icon: Mic },
-                { type: 'File', icon: Upload },
-                { type: 'Camera', icon: Camera }
-              ].map(({ type, icon: Icon }) => (
-                <TouchableOpacity
-                  key={type}
-                  style={[styles.inputTypeButton, inputType === type && styles.inputTypeButtonActive]}
-                  onPress={() => setInputType(type)}
-                >
-                  <Icon 
-                    size={20} 
-                    color={inputType === type ? '#3B82F6' : '#B0B0B0'} 
-                    style={styles.inputTypeIcon}
+              <CustomText style={styles.label}>Title (Optional)</CustomText>
+              <TextInput
+                style={styles.input}
+                placeholder="Brief title for this knowledge..."
+                placeholderTextColor="#B0B0B0"
+                value={title}
+                onChangeText={setTitle}
+              />
+              {inputType === 'Voice' ? (
+                <View style={styles.voiceContainer}>
+                  <CustomText style={styles.voiceLabel}>Voice Recording</CustomText>
+                  <View style={styles.voiceBox}>
+                    <Mic size={48} color="#9CA3AF" style={styles.voiceMicIcon} />
+                    <CustomText style={styles.voicePrompt}>Tap to start recording</CustomText>
+                    <TouchableOpacity style={styles.voiceRecordBtn}>
+                      <CustomText style={styles.voiceRecordBtnText}>Start Recording</CustomText>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ) : inputType === 'File' ? (
+                <View style={styles.fileContainer}>
+                  <CustomText style={styles.fileLabel}>File Upload</CustomText>
+                  <View style={styles.fileBox}>
+                    <Upload size={48} color="#9CA3AF" style={styles.fileIcon} />
+                    <CustomText style={styles.filePrompt}>Tap to select files</CustomText>
+                    <TouchableOpacity style={styles.fileSelectBtn}>
+                      <CustomText style={styles.fileSelectBtnText}>Select Files</CustomText>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ) : inputType === 'Camera' ? (
+                <View style={styles.cameraContainer}>
+                  <CustomText style={styles.cameraLabel}>Camera Capture</CustomText>
+                  <View style={styles.cameraBox}>
+                    <Camera size={48} color="#9CA3AF" style={styles.cameraIcon} />
+                    <CustomText style={styles.cameraPrompt}>Tap to take photo</CustomText>
+                    <TouchableOpacity style={styles.cameraBtn}>
+                      <CustomText style={styles.cameraBtnText}>Take Photo</CustomText>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ) : (
+                <>
+                  <CustomText style={styles.label}>Knowledge Content</CustomText>
+                  <TextInput
+                    style={[styles.input, styles.textArea]}
+                    placeholder="Share your insights, experience, or expertise..."
+                    placeholderTextColor="#B0B0B0"
+                    value={content}
+                    onChangeText={setContent}
+                    multiline
+                    numberOfLines={5}
                   />
-                  <CustomText style={[styles.inputTypeText, inputType === type && styles.inputTypeTextActive]}>{type}</CustomText>
-                </TouchableOpacity>
-              ))}
+                </>
+              )}
+
+
+              <CustomText style={styles.label}>Tags</CustomText>
+              <View style={styles.tagsContainer}>
+                {TAGS.map(tag => (
+                  <TouchableOpacity
+                    key={tag}
+                    style={[styles.tag, selectedTags.includes(tag) && styles.tagSelected]}
+                    onPress={() => handleTagPress(tag)}
+                  >
+                    <CustomText style={[styles.tagText, selectedTags.includes(tag) && styles.tagTextSelected]}>{tag}</CustomText>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              <View style={styles.spacer} />
+            </ScrollView>
+            <View style={styles.bottomEntryBar}>
+              <View style={styles.inputTypeBar}>
+                {[
+                  { type: 'Text', icon: Tag },
+                  { type: 'Voice', icon: Mic },
+                  { type: 'File', icon: Upload },
+                  { type: 'Camera', icon: Camera }
+                ].map(({ type, icon: Icon }) => (
+                  <TouchableOpacity
+                    key={type}
+                    style={[styles.inputTypeButton, inputType === type && styles.inputTypeButtonActive]}
+                    onPress={() => setInputType(type)}
+                  >
+                    <Icon
+                      size={20}
+                      color={inputType === type ? '#3B82F6' : '#B0B0B0'}
+                      style={styles.inputTypeIcon}
+                    />
+                    <CustomText style={[styles.inputTypeText, inputType === type && styles.inputTypeTextActive]}>{type}</CustomText>
+                  </TouchableOpacity>
+                ))}
+              </View>
+              <CustomButton
+                title="Save to AI Twin"
+                onPress={() => { }}
+                style={styles.saveButton}
+                textStyle={styles.saveButtonText}
+                disabled
+              />
             </View>
-            <CustomButton
-              title="Save to AI Twin"
-              onPress={() => {}}
-              style={styles.saveButton}
-              textStyle={styles.saveButtonText}
-              disabled
-            />
-          </View>
-        </>
-      )}
-      {/* Segmented Tab Bar at the bottom (like ImproveScreen) */}
-      <View style={styles.bottomButtonContainer}>
-        <View style={styles.segmentedContainer}>
-          <View
-            style={[styles.segmentedBtn, activeTab === 'Pinned' && styles.segmentedBtnActive]}
-            onTouchEnd={() => setActiveTab('Pinned')}
-          >
-            <CustomText style={activeTab === 'Pinned' ? styles.segmentedBtnTextActive : styles.segmentedBtnText}>Pinned</CustomText>
-          </View>
-          <View
-            style={[styles.segmentedBtn, activeTab === 'New Entry' && styles.segmentedBtnActive]}
-            onTouchEnd={() => setActiveTab('New Entry')}
-          >
-            <CustomText style={activeTab === 'New Entry' ? styles.segmentedBtnTextActive : styles.segmentedBtnText}>New Entry</CustomText>
+          </>
+        )}
+        {/* Segmented Tab Bar at the bottom (like ImproveScreen) */}
+        <View style={styles.bottomButtonContainer}>
+          <View style={styles.segmentedContainer}>
+            <View
+              style={[styles.segmentedBtn, activeTab === 'Pinned' && styles.segmentedBtnActive]}
+              onTouchEnd={() => setActiveTab('Pinned')}
+            >
+              <CustomText style={activeTab === 'Pinned' ? styles.segmentedBtnTextActive : styles.segmentedBtnText}>Pinned</CustomText>
+            </View>
+            <View
+              style={[styles.segmentedBtn, activeTab === 'New Entry' && styles.segmentedBtnActive]}
+              onTouchEnd={() => setActiveTab('New Entry')}
+            >
+              <CustomText style={activeTab === 'New Entry' ? styles.segmentedBtnTextActive : styles.segmentedBtnText}>New Entry</CustomText>
+            </View>
           </View>
         </View>
-      </View>
       </View>
     </SafeAreaView>
   );
@@ -233,7 +233,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
-    marginTop: 10,
   },
   content: {
     flex: 1,
@@ -472,7 +471,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 15,
   },
-   fileContainer: {
+  fileContainer: {
     marginBottom: 16,
   },
   fileLabel: {

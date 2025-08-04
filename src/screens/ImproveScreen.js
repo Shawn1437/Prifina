@@ -230,8 +230,7 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: colors.background,
-    paddingTop: 24,
-    marginTop: 15,
+   
   },
   recommendCard: {
     flexDirection: 'row',

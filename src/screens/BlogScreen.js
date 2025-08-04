@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Switch, TextInput } from 'react-native';
+import { View, StyleSheet, SafeAreaView, ScrollView, TouchableOpacity, Switch, TextInput, StatusBar } from 'react-native';
 import { colors, spacing } from '../styles';
 import { CustomText, CustomButton } from '../components/common';
 import { Trash2, CreditCard, Send, Link as LinkIcon, EyeOff, Plus } from 'lucide-react-native';
@@ -62,6 +62,7 @@ const BlogScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       {activeTab === 'Settings' ? (
         <ScrollView contentContainerStyle={{ paddingBottom: 20,marginHorizontal:16 ,paddingTop: 16 }} showsVerticalScrollIndicator={false}>
           {/* General Settings Card */}
@@ -272,8 +273,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    // marginTop:40 // removed to avoid extra top space
-    marginTop: 40,
+   
   },
   settingsCard: {
     backgroundColor: '#fff',

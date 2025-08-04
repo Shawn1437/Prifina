@@ -202,7 +202,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    marginTop:40
   },
   metricsRow: {
     flexDirection: 'row',
