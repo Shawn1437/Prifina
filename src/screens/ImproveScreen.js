@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { colors, spacing } from '../styles';
-import { CustomText, CustomButton } from '../components/common';
-import { Upload, Camera, MessageSquare, PenTool, Target, Eye, TrendingUp, Bookmark, Trash2, MoveRight } from 'lucide-react-native';
+import { CustomText } from '../components/common';
+import { 
+  ImproveTabs, 
+  TipCard, 
+  HiddenSuggestionsSection, 
+  RecommendationCard, 
+  ImproveTabBar 
+} from '../components/improvement';
 
 const TABS = [
   { key: 'all', label: 'All' },
@@ -55,173 +61,100 @@ const ImproveScreen = () => {
   const [activeTipsTab, setActiveTipsTab] = useState('all');
   const [showHidden, setShowHidden] = useState(false);
 
+  const handleTipAction = (tipIndex) => {
+    console.log('Tip action clicked:', tipIndex);
+  };
+
+  const handleTipClose = (tipIndex) => {
+    console.log('Tip closed:', tipIndex);
+  };
+
+  const handleRecommendationAction = (action) => {
+    console.log('Recommendation action:', action);
+  };
+
+  const handleBookmark = (cardIndex) => {
+    console.log('Bookmarked:', cardIndex);
+  };
+
+  const handleDelete = (cardIndex) => {
+    console.log('Deleted:', cardIndex);
+  };
+
+  const smartRecommendations = [
+    {
+      title: '2 questions had low match scores',
+      desc: 'Recent questions about "team hiring" and "product roadmaps" could use better responses',
+      urgent: true,
+      icon: 'urgent',
+      action: 'Improve now',
+    },
+    {
+      title: 'AI in education is trending',
+      desc: 'This aligns with your expertise. Want to write about it?',
+      icon: 'trending',
+      action: 'Create post',
+    },
+    {
+      title: 'Session saved 10x this week',
+      desc: 'Your "Startup Fundraising" session is popular. Consider highlighting it.',
+      icon: 'target',
+      action: 'Highlight',
+    },
+  ];
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={{ flex: 1, backgroundColor: colors.background }}>
         {/* Improve Tips Content */}
         {activeTab === 'Improve Tips' && (
           <ScrollView style={styles.tipsContainer} contentContainerStyle={{ paddingBottom: 24 }}>
-            {/* Tips Tab Bar */}
-            <View style={{ marginBottom: 18, marginTop: 8 }}>
-              <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.tipsTabBar}
-              >
-                {TABS.map(tab => (
-                  <View
-                    key={tab.key}
-                    style={[styles.tipsTabBtn, activeTipsTab === tab.key && styles.tipsTabBtnActive]}
-                    onTouchEnd={() => setActiveTipsTab(tab.key)}
-                  >
-                    <CustomText style={activeTipsTab === tab.key ? styles.tipsTabTextActive : styles.tipsTabText}>{tab.label}</CustomText>
-                  </View>
-                ))}
-              </ScrollView>
-            </View>
-            {/* Tips Cards */}
+            <ImproveTabs 
+              tabs={TABS} 
+              activeTab={activeTipsTab} 
+              onTabChange={setActiveTipsTab} 
+            />
             {tips.map((tip, idx) => (
-              <View key={idx} style={styles.tipCard}>
-                <View style={styles.tipCardContent}>
-                  <View style={styles.tipIconWrap}>
-                    {tip.icon === 'upload' && <Upload size={26} color={colors.textSecondary} />}
-                    {tip.icon === 'photo' && <Camera size={26} color={colors.textSecondary} />}
-                    {tip.icon === 'chat' && <MessageSquare size={26} color={colors.textSecondary} />}
-                    {tip.icon === 'edit' && <PenTool size={26} color={colors.textSecondary} />}
-                    {tip.icon === 'target' && <Target size={26} color={colors.textSecondary} />}
-                  </View>
-                  <CustomText style={styles.tipTitle}>{tip.title}</CustomText>
-                  <CustomText style={styles.tipDesc}>{tip.desc}</CustomText>
-                  <View style={styles.tipFooter}>
-                    <CustomText style={styles.tipTag}>{tip.tag}</CustomText>
-                    <View style={styles.tipActionBtn}>
-                      <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <CustomText style={styles.tipActionText}>{tip.action}</CustomText>
-                        <MoveRight size={16} color={colors.primary} style={{marginLeft: 4}} />
-                      </View>
-                    </View>
-                  </View>
-                </View>
-                <CustomText style={styles.tipClose}>✕</CustomText>
-              </View>
+              <TipCard
+                key={idx}
+                icon={tip.icon}
+                title={tip.title}
+                desc={tip.desc}
+                tag={tip.tag}
+                action={tip.action}
+                onAction={() => handleTipAction(idx)}
+                onClose={() => handleTipClose(idx)}
+              />
             ))}
-            {/* Hidden Suggestions Section */}
-            <View
-              style={styles.hiddenSectionContainer}
-              onTouchEnd={() => setShowHidden(v => !v)}
-            >
-              <CustomText style={styles.hiddenSectionText}>Hidden Suggestions</CustomText>
-              <View style={styles.hiddenEyeWrap}>
-                <Eye size={22} color={colors.gray} style={styles.hiddenSectionEye} />
-                {showHidden && <View style={styles.hiddenEyeSlash} />}
-              </View>
-            </View>
-            {showHidden && (
-              <View style={styles.hiddenCardsWrap}>
-                <View style={styles.hiddenCard}>
-                  <CustomText style={styles.hiddenCardTitle}>Enable weekly email summaries</CustomText>
-                  <CustomText style={styles.hiddenCardDesc}>Get insights about your AI twin's performance delivered to your inbox</CustomText>
-                  <View style={styles.hiddenCardFooter}>
-                    <CustomText style={styles.hiddenCardTag}>Notifications</CustomText>
-                    <CustomText style={styles.hiddenCardRestore}>Restore</CustomText>
-                  </View>
-                </View>
-                <View style={styles.hiddenCard}>
-                  <CustomText style={styles.hiddenCardTitle}>Connect your calendar</CustomText>
-                  <CustomText style={styles.hiddenCardDesc}>Auto-generate knowledge from your meeting notes and presentations</CustomText>
-                  <View style={styles.hiddenCardFooter}>
-                    <CustomText style={styles.hiddenCardTag}>Integrations</CustomText>
-                    <CustomText style={styles.hiddenCardRestore}>Restore</CustomText>
-                  </View>
-                </View>
-              </View>
-            )}
+            <HiddenSuggestionsSection
+              visible={showHidden}
+              onToggle={() => setShowHidden(v => !v)}
+            />
           </ScrollView>
         )}
-        {/* Smart Recommendations Cards */}
+        {/* Smart Recommendations Content */}
         {activeTab === 'Smart Recommendations' && (
           <ScrollView style={styles.tipsContainer} contentContainerStyle={{ paddingBottom: 24 }}>
-            <View style={styles.recommendCardUrgent}>
-              <View style={{ width: '100%' }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                  <View style={styles.recommendCardIconWrap}>
-                    <MessageSquare size={24} color={colors.textSecondary} />
-                  </View>
-                  <View style={{ flex: 1 }} />
-                  <View style={styles.recommendCardUrgentBadge}><CustomText style={styles.recommendCardUrgentBadgeText}>Urgent</CustomText></View>
-                </View>
-                <CustomText style={styles.recommendCardTitle}>2 questions had low match scores</CustomText>
-                <CustomText style={styles.recommendCardDesc}>Recent questions about "team hiring" and "product roadmaps" could use better responses</CustomText>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, justifyContent: 'space-between' }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <CustomText style={styles.recommendCardAction}>Improve now</CustomText>
-                    <MoveRight size={18} color={colors.primary} style={{ marginLeft: 4 }} />
-                  </View>
-                  <View style={styles.recommendCardActionsRow}>
-                    <Bookmark size={18} color={colors.textSecondary} style={{ marginLeft: 12 }} />
-                    <Trash2 size={18} color={colors.textSecondary} style={{ marginLeft: 12 }} />
-                  </View>
-                </View>
-              </View>
-            </View>
-            <View style={styles.recommendCard}>
-              <View style={{ width: '100%' }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                  <View style={styles.recommendCardIconWrap}><TrendingUp size={24} color={colors.textSecondary} /></View>
-                </View>
-                <CustomText style={styles.recommendCardTitle}>AI in education is trending</CustomText>
-                <CustomText style={styles.recommendCardDesc}>This aligns with your expertise. Want to write about it?</CustomText>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, justifyContent: 'space-between' }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <CustomText style={styles.recommendCardAction}>Create post</CustomText>
-                    <MoveRight size={18} color={colors.primary} style={{ marginLeft: 4 }} />
-                  </View>
-                  <View style={styles.recommendCardActionsRow}>
-                    <Bookmark size={18} color={colors.textSecondary} style={{ marginLeft: 12 }} />
-                    <Trash2 size={18} color={colors.textSecondary} style={{ marginLeft: 12 }} />
-                  </View>
-                </View>
-              </View>
-            </View>
-            <View style={styles.recommendCard}>
-              <View style={{ width: '100%' }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-                  <View style={styles.recommendCardIconWrap}><Target size={24} color={colors.textSecondary} /></View>
-                </View>
-                <CustomText style={styles.recommendCardTitle}>Session saved 10x this week</CustomText>
-                <CustomText style={styles.recommendCardDesc}>Your "Startup Fundraising" session is popular. Consider highlighting it.</CustomText>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, justifyContent: 'space-between' }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <CustomText style={styles.recommendCardAction}>Highlight</CustomText>
-                    <MoveRight size={18} color={colors.primary} style={{ marginLeft: 4 }} />
-                  </View>
-                  <View style={styles.recommendCardActionsRow}>
-                    <Bookmark size={18} color={colors.textSecondary} style={{ marginLeft: 12 }} />
-                    <Trash2 size={18} color={colors.textSecondary} style={{ marginLeft: 12 }} />
-                  </View>
-                </View>
-              </View>
-            </View>
+            {smartRecommendations.map((recommendation, idx) => (
+              <RecommendationCard
+                key={idx}
+                title={recommendation.title}
+                desc={recommendation.desc}
+                urgent={recommendation.urgent}
+                icon={recommendation.icon}
+                action={recommendation.action}
+                onAction={() => handleRecommendationAction(recommendation.action)}
+                onBookmark={() => handleBookmark(idx)}
+                onDelete={() => handleDelete(idx)}
+              />
+            ))}
           </ScrollView>
         )}
       </View>
-      {/* Tab Bar for Improve Tips/Smart Recommendations (fixed at bottom) */}
-      <View style={styles.bottomButtonContainer}>
-        <View style={styles.segmentedContainer}>
-          <View
-            style={[styles.segmentedBtn, activeTab === 'Improve Tips' && styles.segmentedBtnActive]}
-            onTouchEnd={() => setActiveTab('Improve Tips')}
-          >
-            <CustomText style={activeTab === 'Improve Tips' ? styles.segmentedBtnTextActive : styles.segmentedBtnText}>Improve Tips</CustomText>
-          </View>
-          <View
-            style={[styles.segmentedBtn, activeTab === 'Smart Recommendations' && styles.segmentedBtnActive]}
-            onTouchEnd={() => setActiveTab('Smart Recommendations')}
-          >
-            <CustomText style={activeTab === 'Smart Recommendations' ? styles.segmentedBtnTextActive : styles.segmentedBtnText}>Smart Recommendations</CustomText>
-          </View>
-        </View>
-      </View>
+      <ImproveTabBar 
+        activeTab={activeTab} 
+        onTabChange={setActiveTab} 
+      />
     </SafeAreaView>
   );
 };
@@ -230,377 +163,13 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: colors.background,
-   
-  },
-  recommendCard: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 20,
-    marginHorizontal: 12,
-    marginBottom: 15,
-    shadowColor: '#1A1A1A',
-    shadowOpacity: 0.04,
-    shadowRadius: 12,
-    elevation: 1,
-    borderWidth: 1,
-    borderColor: '#E6E8EC',
-    position: 'relative',
-  },
-  recommendCardUrgent: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    backgroundColor: '#FFF6F6',
-    borderRadius: 16,
-    padding: 20,
-    marginHorizontal: 12,
-    marginBottom: 15,
-    shadowColor: '#1A1A1A',
-    shadowOpacity: 0.04,
-    shadowRadius: 12,
-    elevation: 1,
-    borderWidth: 1,
-    borderColor: '#FFD6D6',
-    position: 'relative',
-    marginTop: 20,
-  },
-  recommendCardIconWrap: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-  },
-  recommendCardIcon: {
-    fontSize: 24,
-    color: colors.textSecondary,
-  },
-  recommendCardTitle: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginBottom: 6,
-    color: colors.textPrimary,
-  },
-  recommendCardDesc: {
-    color: colors.textSecondary,
-    fontSize: 14,
-    marginBottom: 12,
-  },
-  recommendCardFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  recommendCardAction: {
-    color: colors.primary,
-    fontWeight: '500',
-    fontSize: 16,
-  },
-  recommendCardActionsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  recommendCardActionIcon: {
-    fontSize: 18,
-    color: colors.textSecondary,
-    marginLeft: 12,
-    opacity: 0.7,
-  },
-  recommendCardUrgentBadge: {
-    position: 'absolute',
-    top: 16,
-    right: 16,
-    backgroundColor: '#FF4D4F',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-    zIndex: 2,
-  },
-  recommendCardUrgentBadgeText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 12,
-    letterSpacing: 0.2,
-  },
-  hiddenEyeWrap: {
-    position: 'relative',
-    width: 28,
-    height: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  hiddenEyeSlash: {
-    position: 'absolute',
-    left: -2,
-    top: 13,
-    width: 32,
-    height: 2.5,
-    backgroundColor: colors.textSecondary,
-    opacity: 0.7,
-    transform: [{ rotate: '-28deg' }],
-    borderRadius: 1.5,
-  },
-  hiddenCardsWrap: {
-    marginTop: 0,
-    marginBottom: 10,
-    marginHorizontal: 8,
-  },
-  hiddenCard: {
-    backgroundColor: '#F8F9FB',
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: '#F0F1F3',
-    padding: 18,
-    marginBottom: 14,
-  },
-  hiddenCardTitle: {
-    fontWeight: 'bold',
-    fontSize: 15,
-    color: colors.textPrimary,
-    marginBottom: 4,
-  },
-  hiddenCardDesc: {
-    color: colors.textSecondary,
-    fontSize: 14,
-    marginBottom: 14,
-  },
-  hiddenCardFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  hiddenCardTag: {
-    color: '#7B61FF',
-    fontSize: 13,
-    fontWeight: '500',
-  },
-  hiddenCardRestore: {
-    color: '#7B61FF',
-    fontWeight: '500',
-    fontSize: 14,
-    backgroundColor: 'transparent',
-    paddingVertical: 2,
-    paddingHorizontal: 8,
-    borderRadius: 8,
-  },
-  hiddenSectionContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: colors.background,
-    borderRadius: 14,
-    paddingVertical: 18,
-    paddingHorizontal: 18,
-    marginHorizontal: 8,
-    marginTop: 10,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#F0F1F3',
-  },
-  hiddenSectionText: {
-    color: colors.gray,
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  hiddenSectionEye: {
-    fontSize: 22,
-    color: colors.textSecondary,
-    opacity: 1,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    marginTop: 0,
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: spacing.lg,
-  },
-  title: {
-    marginBottom: spacing.md,
-  },
-  description: {
-    textAlign: 'center',
-    color: colors.textSecondary,
-  },
-  bottomButtonContainer: {
-    padding: 16,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    marginBottom: -20, // Add a little margin at the bottom
-  },
-  segmentedContainer: {
-    flexDirection: 'row',
-    backgroundColor: colors.background,
-    borderRadius: 12,
-    padding: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 18,
-    marginTop: 0,
+    paddingTop: 14,
+    marginTop: 15,
   },
   tipsContainer: {
     flex: 1,
     paddingHorizontal: 0,
     marginTop: 0,
-  },
-  tipsTabBar: {
-    flexDirection: 'row',
-    backgroundColor: colors.background,
-    borderRadius: 20,
-    padding: 4,
-    marginHorizontal: 8,
-    marginTop: 6,
-  },
-  tipsTabBtn: {
-    paddingHorizontal: 16,
-    paddingVertical: 5,
-    borderRadius: 22,
-    marginRight: 8,
-    backgroundColor: colors.background,
-    borderWidth: 1,
-    borderColor: '#E6E8EC',
-  },
-  tipsTabBtnActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-    shadowColor: 'transparent',
-    shadowOpacity: 0,
-    shadowRadius: 0,
-    elevation: 0,
-  },
-  tipsTabText: {
-    color: colors.textSecondary,
-    fontWeight: '500',
-    fontSize: 15,
-  },
-  tipsTabTextActive: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 15,
-  },
-  tipCard: {
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 20,
-    marginHorizontal: 12,
-    marginBottom: 14,
-    shadowColor: '#1A1A1A',
-    shadowOpacity: 0.04,
-    shadowRadius: 12,
-    elevation: 1,
-    borderWidth: 1,
-    borderColor: '#E6E8EC',
-    position: 'relative',
-    borderLeftWidth: 4,
-    borderLeftColor: '#7B8493',
-  },
-  tipCardContent: {
-    flexDirection: 'column',
-    alignItems: 'flex-start',
-  },
-  tipIconWrap: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: '#F4F5F7',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
-    borderWidth: 1,
-    borderColor: '#E6E8EC',
-    marginBottom: 12, // Add margin below icon
-  },
-  tipIcon: {
-    fontSize: 26,
-    color: colors.textSecondary,
-  },
-  tipContent: {
-    flex: 1,
-  },
-  tipTitle: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginBottom: 6,
-    color: colors.textPrimary,
-  },
-  tipDesc: {
-    color: colors.textSecondary,
-    fontSize: 14,
-    marginBottom: 12,
-  },
-  tipFooter: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginTop: 18, // Add gap from content to footer
-  },
-  tipTag: {
-    color: '#7B61FF',
-    fontSize: 13,
-    fontWeight: '500',
-    backgroundColor: 'transparent',
-    paddingVertical: 0,
-    paddingHorizontal: 0,
-  },
-  tipActionBtn: {
-    backgroundColor: colors.tagsbg,
-    borderRadius: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    flexDirection: 'row',
-    alignItems: 'center',
-    minWidth: 90,
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#E6E8EC',
-  },
-  tipActionText: {
-    color: colors.primary,
-    fontWeight: '500',
-    fontSize: 13,
-    letterSpacing: 0.1,
-  },
-  tipClose: {
-    position: 'absolute',
-    top: 14,
-    right: 14,
-    color: colors.textSecondary,
-    fontSize: 18,
-    opacity: 0.5,
-  },
-  segmentedBtn: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  segmentedBtnActive: {
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowRadius: 2,
-    elevation: 1,
-
-
-  },
-  segmentedBtnText: {
-    color: colors.textSecondary,
-    fontWeight: '500',
-    fontSize: 14,
-  },
-  segmentedBtnTextActive: {
-    color: colors.textPrimary,
-    fontWeight: 'bold',
-    fontSize: 14,
   },
 });
 

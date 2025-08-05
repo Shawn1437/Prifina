@@ -1,9 +1,10 @@
-
 import React, { useState } from 'react';
-import { View, StyleSheet, SafeAreaView, FlatList, TextInput, TouchableOpacity, ScrollView, StatusBar } from 'react-native';
+import { View, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
 import { colors, spacing } from '../styles';
-import { CustomText, CustomButton, KnowledgeCard } from '../components/common';
-import { Pin, Mic, Upload, Camera, Tag } from 'lucide-react-native';
+import { CustomText, CustomButton } from '../components/common';
+import PinnedQuestions from '../components/AddNew/PinnedQuestions';
+import InputForm from '../components/AddNew/InputForm';
+import InputTypeBar from '../components/AddNew/InputTypeBar';
 
 const mockQuestions = [
   {
@@ -52,154 +53,37 @@ const AddNewScreen = () => {
     setPinnedQuestions(prev => prev.filter(item => item.id !== id));
   };
 
-  const handleTagPress = (tag) => {
-    setSelectedTags(prev =>
-      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
-    );
-  };
-
-  const renderItem = ({ item }) => (
-    <KnowledgeCard
-      title={item.title}
-      description={item.description}
-      pinned={item.pinned}
-      timeAgo={item.timeAgo}
-      knowledgeAdded={item.knowledgeAdded}
-      onAddKnowledge={() => handleAddKnowledge(item.id)}
-      onUnpin={() => handleUnpin(item.id)}
-    />
-  );
-
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
-      <StatusBar barStyle="dark-content" backgroundColor="rgba(255, 255, 255, 1)" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       <View style={styles.content}>
         {activeTab === 'Pinned' && (
-          <>
-            {pinnedQuestions.length > 0 ? (
-              <FlatList
-                data={pinnedQuestions}
-                renderItem={renderItem}
-                keyExtractor={item => item.id}
-                contentContainerStyle={styles.listContent}
-                showsVerticalScrollIndicator={false}
-              />
-            ) : (
-              <View style={styles.emptyContainer}>
-                <View style={styles.emptyIconContainer}>
-                  <Pin size={48} color="#C1C7CD" />
-                </View>
-                <CustomText style={styles.emptyTitle}>No Pinned Interactions</CustomText>
-                <CustomText style={styles.emptyDescription}>
-                  Pin interactions from the Feeds tab to improve{'\n'}your AI twin's responses
-                </CustomText>
-              </View>
-            )}
-          </>
+          <PinnedQuestions
+            pinnedQuestions={pinnedQuestions}
+            onAddKnowledge={handleAddKnowledge}
+            onUnpin={handleUnpin}
+            styles={styles}
+          />
         )}
         {activeTab === 'New Entry' && (
           <>
-            <ScrollView
-              contentContainerStyle={styles.formContainer}
-              keyboardShouldPersistTaps="handled"
-              showsVerticalScrollIndicator={false}
-            >
-              <CustomText style={styles.label}>Title (Optional)</CustomText>
-              <TextInput
-                style={styles.input}
-                placeholder="Brief title for this knowledge..."
-                placeholderTextColor="#B0B0B0"
-                value={title}
-                onChangeText={setTitle}
-              />
-              {inputType === 'Voice' ? (
-                <View style={styles.voiceContainer}>
-                  <CustomText style={styles.voiceLabel}>Voice Recording</CustomText>
-                  <View style={styles.voiceBox}>
-                    <Mic size={48} color="#9CA3AF" style={styles.voiceMicIcon} />
-                    <CustomText style={styles.voicePrompt}>Tap to start recording</CustomText>
-                    <TouchableOpacity style={styles.voiceRecordBtn}>
-                      <CustomText style={styles.voiceRecordBtnText}>Start Recording</CustomText>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ) : inputType === 'File' ? (
-                <View style={styles.fileContainer}>
-                  <CustomText style={styles.fileLabel}>File Upload</CustomText>
-                  <View style={styles.fileBox}>
-                    <Upload size={48} color="#9CA3AF" style={styles.fileIcon} />
-                    <CustomText style={styles.filePrompt}>Tap to select files</CustomText>
-                    <TouchableOpacity style={styles.fileSelectBtn}>
-                      <CustomText style={styles.fileSelectBtnText}>Select Files</CustomText>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ) : inputType === 'Camera' ? (
-                <View style={styles.cameraContainer}>
-                  <CustomText style={styles.cameraLabel}>Camera Capture</CustomText>
-                  <View style={styles.cameraBox}>
-                    <Camera size={48} color="#9CA3AF" style={styles.cameraIcon} />
-                    <CustomText style={styles.cameraPrompt}>Tap to take photo</CustomText>
-                    <TouchableOpacity style={styles.cameraBtn}>
-                      <CustomText style={styles.cameraBtnText}>Take Photo</CustomText>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ) : (
-                <>
-                  <CustomText style={styles.label}>Knowledge Content</CustomText>
-                  <TextInput
-                    style={[styles.input, styles.textArea]}
-                    placeholder="Share your insights, experience, or expertise..."
-                    placeholderTextColor="#B0B0B0"
-                    value={content}
-                    onChangeText={setContent}
-                    multiline
-                    numberOfLines={5}
-                  />
-                </>
-              )}
-
-
-              <CustomText style={styles.label}>Tags</CustomText>
-              <View style={styles.tagsContainer}>
-                {TAGS.map(tag => (
-                  <TouchableOpacity
-                    key={tag}
-                    style={[styles.tag, selectedTags.includes(tag) && styles.tagSelected]}
-                    onPress={() => handleTagPress(tag)}
-                  >
-                    <CustomText style={[styles.tagText, selectedTags.includes(tag) && styles.tagTextSelected]}>{tag}</CustomText>
-                  </TouchableOpacity>
-                ))}
-              </View>
-              <View style={styles.spacer} />
-            </ScrollView>
+            <InputForm
+              title={title}
+              setTitle={setTitle}
+              content={content}
+              setContent={setContent}
+              inputType={inputType}
+              setInputType={setInputType}
+              selectedTags={selectedTags}
+              setSelectedTags={setSelectedTags}
+              TAGS={TAGS}
+              styles={styles}
+            />
             <View style={styles.bottomEntryBar}>
-              <View style={styles.inputTypeBar}>
-                {[
-                  { type: 'Text', icon: Tag },
-                  { type: 'Voice', icon: Mic },
-                  { type: 'File', icon: Upload },
-                  { type: 'Camera', icon: Camera }
-                ].map(({ type, icon: Icon }) => (
-                  <TouchableOpacity
-                    key={type}
-                    style={[styles.inputTypeButton, inputType === type && styles.inputTypeButtonActive]}
-                    onPress={() => setInputType(type)}
-                  >
-                    <Icon
-                      size={20}
-                      color={inputType === type ? '#3B82F6' : '#B0B0B0'}
-                      style={styles.inputTypeIcon}
-                    />
-                    <CustomText style={[styles.inputTypeText, inputType === type && styles.inputTypeTextActive]}>{type}</CustomText>
-                  </TouchableOpacity>
-                ))}
-              </View>
+              <InputTypeBar inputType={inputType} setInputType={setInputType} styles={styles} />
               <CustomButton
                 title="Save to AI Twin"
-                onPress={() => { }}
+                onPress={() => {}}
                 style={styles.saveButton}
                 textStyle={styles.saveButtonText}
                 disabled
@@ -237,128 +121,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingTop: spacing.lg, // Add more top padding to prevent content from hiding under notch
-  },
-  listContent: {
-    paddingVertical: spacing.md,
-    paddingBottom: 140, // Space for bottom tabs
-    paddingHorizontal: spacing.sm,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    paddingTop: spacing.xl * 3,
-    paddingHorizontal: spacing.lg,
-  },
-  emptyIconContainer: {
-    marginBottom: spacing.lg,
-  },
-  emptyTitle: {
-    color: colors.textPrimary,
-    fontSize: 18,
-    fontWeight: '800',
-    marginBottom: spacing.sm,
-    textAlign: 'center',
-  },
-  emptyDescription: {
-    color: colors.textSecondary,
-    fontSize: 16,
-    textAlign: 'center',
-    lineHeight: 22,
-  },
-  formContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    margin: spacing.md,
-    padding: spacing.md,
-    paddingBottom: 160, // Space for bottom elements
-  },
-  label: {
-    fontWeight: '600',
-    fontSize: 14,
-    marginBottom: 6,
-    marginTop: 12,
-    color: '#222',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 15,
-    backgroundColor: '#FAFAFA',
-    marginBottom: 10,
-    color: '#222',
-  },
-  textArea: {
-    minHeight: 90,
-    textAlignVertical: 'top',
-  },
-  tagsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginVertical: 8,
-  },
-  spacer: {
-    height: 140,
-  },
-  tag: {
-    backgroundColor: '#F3F4F6',
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  tagSelected: {
-    backgroundColor: '#E0E7FF',
-  },
-  tagText: {
-    color: '#6B7280',
-    fontSize: 13,
-  },
-  tagTextSelected: {
-    color: '#3730A3',
-    fontWeight: 'bold',
-  },
-  inputTypeBar: {
-    flexDirection: 'row',
-    backgroundColor: '#F7F8FA',
-    borderRadius: 10,
-    marginTop: 18,
-    marginBottom: 10,
-    padding: 4,
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  inputTypeButton: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 10,
-    borderRadius: 8,
-    flexDirection: 'row',
-  },
-  inputTypeIcon: {
-    paddingHorizontal: 14,
-  },
-  inputTypeButtonActive: {
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  inputTypeText: {
-    color: '#B0B0B0',
-    fontWeight: '500',
-    fontSize: 15,
-  },
-  inputTypeTextActive: {
-    color: '#3B82F6',
-    fontWeight: '600',
-    fontSize: 15,
   },
   bottomEntryBar: {
     backgroundColor: '#fff',
@@ -428,127 +190,6 @@ const styles = StyleSheet.create({
   },
   segmentedBtnTextActive: {
     color: colors.textPrimary,
-    fontWeight: 'bold',
-    fontSize: 15,
-  },
-  voiceContainer: {
-    marginBottom: 16,
-  },
-  voiceLabel: {
-    fontWeight: '600',
-    fontSize: 15,
-    color: '#222',
-    marginBottom: 8,
-  },
-  voiceBox: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderStyle: 'dashed',
-    padding: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  voiceMicIcon: {
-    marginBottom: 10,
-  },
-  voicePrompt: {
-    color: '#9CA3AF',
-    fontSize: 15,
-    marginBottom: 16,
-  },
-  voiceRecordBtn: {
-    backgroundColor: '#F44F4F',
-    borderRadius: 20,
-    paddingHorizontal: 28,
-    paddingVertical: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  voiceRecordBtnText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 15,
-  },
-  fileContainer: {
-    marginBottom: 16,
-  },
-  fileLabel: {
-    fontWeight: '600',
-    fontSize: 15,
-    color: '#222',
-    marginBottom: 8,
-  },
-  fileBox: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderStyle: 'dashed',
-    padding: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  fileIcon: {
-    marginBottom: 10,
-  },
-  filePrompt: {
-    color: '#9CA3AF',
-    fontSize: 15,
-    marginBottom: 16,
-  },
-  fileSelectBtn: {
-    backgroundColor: '#3B82F6',
-    borderRadius: 10,
-    paddingHorizontal: 28,
-    paddingVertical: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  fileSelectBtnText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 15,
-  },
-  // ...existing code...
-  cameraContainer: {
-    marginBottom: 16,
-  },
-  cameraLabel: {
-    fontWeight: '600',
-    fontSize: 15,
-    color: '#222',
-    marginBottom: 8,
-  },
-  cameraBox: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#D1D5DB',
-    borderStyle: 'dashed',
-    padding: 28,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cameraIcon: {
-    marginBottom: 8,
-  },
-  cameraPrompt: {
-    color: '#9CA3AF',
-    fontSize: 15,
-    marginBottom: 16,
-  },
-  cameraBtn: {
-    backgroundColor: '#3B82F6',
-    borderRadius: 10,
-    paddingHorizontal: 28,
-    paddingVertical: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cameraBtnText: {
-    color: '#fff',
     fontWeight: 'bold',
     fontSize: 15,
   },
