@@ -109,7 +109,7 @@ const FeedScreen = () => {
           data={posts}
           renderItem={renderPost}
           keyExtractor={item => item.id}
-          contentContainerStyle={styles.listContainer}
+          contentContainerStyle={[styles.listContainer, { paddingBottom: 90 }]}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
@@ -126,12 +126,10 @@ const FeedScreen = () => {
           data={mockSessions}
           renderItem={renderSession}
           keyExtractor={item => item.id}
-          contentContainerStyle={styles.listContainer}
+          contentContainerStyle={[styles.listContainer, { paddingBottom: 100 }]}
           showsVerticalScrollIndicator={false}
         />
       )}
-
-
 
       <BottomTabSwitcher
         tabs={['Live Feed', 'Sessions']}

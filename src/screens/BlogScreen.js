@@ -84,7 +84,7 @@ const BlogScreen = () => {
           />
         </ScrollView>
       ) : (
-        <ScrollView contentContainerStyle={{ paddingBottom: 120 }} showsVerticalScrollIndicator={false}>
+        <ScrollView contentContainerStyle={{ paddingBottom: 90 }} showsVerticalScrollIndicator={false}>
           {activeTab === 'Drafts' && (
             <DraftsList drafts={mockDrafts} styles={styles} />
           )}

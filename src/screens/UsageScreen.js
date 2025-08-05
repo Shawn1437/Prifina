@@ -63,7 +63,7 @@ const sessions = [
 const UsageScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={{ padding: 20 }} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={{ padding:20 }} showsVerticalScrollIndicator={false}>
         <MetricsRow metrics={metrics} />
         <ChartCard dailyData={dailyData} dailyLabels={dailyLabels} />
         <QualityCard />

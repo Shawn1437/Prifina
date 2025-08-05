@@ -1,8 +1,21 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Alert, Platform, PermissionsAndroid, ActionSheetIOS } from 'react-native';
 import { CustomText } from '../common';
 import { Upload, Camera, MessageSquare, PenTool, Target, MoveRight } from 'lucide-react-native';
 import { colors } from '../../styles';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
+
+// Try importing DocumentPicker with graceful fallback
+let DocumentPicker = null;
+try {
+  DocumentPicker = require('@react-native-documents/picker').default;
+  if (!DocumentPicker) {
+    DocumentPicker = require('@react-native-documents/picker');
+  }
+} catch (error) {
+  console.warn('DocumentPicker import failed in TipCard:', error);
+  DocumentPicker = null;
+}
 
 const ICON_MAP = {
   upload: Upload,
@@ -15,6 +28,185 @@ const ICON_MAP = {
 const TipCard = ({ icon, title, desc, tag, action, onClose, onAction }) => {
   const IconComponent = ICON_MAP[icon];
 
+  // Handle document upload functionality
+  const handleDocumentUpload = async () => {
+    try {
+      console.log('Starting document upload from TipCard...');
+      
+      if (!DocumentPicker) {
+        console.log('DocumentPicker not available, showing camera/gallery options');
+        showMediaSelectionFallback();
+        return;
+      }
+      
+      if (!DocumentPicker.pick) {
+        console.log('DocumentPicker.pick not available, showing fallback options');
+        showMediaSelectionFallback();
+        return;
+      }
+
+      // Try the document picker
+      const result = await DocumentPicker.pick({
+        type: [DocumentPicker.types.allFiles],
+        allowMultiSelection: false,
+        copyTo: 'cachesDirectory',
+      });
+
+      console.log('Document selected:', result);
+
+      if (result && result.length > 0) {
+        const file = result[0];
+        
+        // if (!file.uri) {
+        //   throw new Error('Invalid file selected - no URI');
+        // }
+
+        // Check file size (limit to 50MB)
+        const maxSize = 50 * 1024 * 1024;
+        if (file.size && file.size > maxSize) {
+          Alert.alert(
+            'File Too Large', 
+            `The selected file is ${(file.size / (1024 * 1024)).toFixed(1)}MB. Please select a file smaller than 50MB.`
+          );
+          return;
+        }
+
+        Alert.alert('Document Uploaded', `Successfully uploaded: ${file.name || 'Unknown file'}`);
+        console.log('Document uploaded:', file);
+      }
+    } catch (error) {
+      console.error('Document upload error:', error);
+
+      if (error.code === 'DOCUMENT_PICKER_CANCELED') {
+        console.log('User cancelled document selection');
+        return;
+      }
+
+      if (error.message) {
+        console.log('DocumentPicker error, showing fallback:', error.message);
+        showMediaSelectionFallback();
+        return;
+      }
+
+      Alert.alert('Upload Error', 'Failed to upload document. Please try again.');
+    }
+  };
+
+  // Handle camera functionality
+  const handleCameraAction = async (action) => {
+    try {
+      // Request camera permission for Android
+      if (Platform.OS === 'android' && action === 'camera') {
+        const cameraPermission = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Camera Permission',
+            message: 'This app needs access to your camera to take photos.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+
+        if (cameraPermission !== PermissionsAndroid.RESULTS.GRANTED) {
+          Alert.alert('Permission Denied', 'Camera permission is required to take photos.');
+          return;
+        }
+      }
+
+      const options = {
+        mediaType: 'photo',
+        includeBase64: false,
+        maxHeight: 2000,
+        maxWidth: 2000,
+        quality: 0.8,
+      };
+
+      const callback = (response) => {
+        console.log('Camera/Gallery response:', response);
+
+        if (response.didCancel) {
+          console.log('User cancelled camera/gallery');
+          return;
+        }
+
+        if (response.errorMessage) {
+          console.error('Camera/Gallery error:', response.errorMessage);
+          Alert.alert('Error', `Failed to access ${action}: ${response.errorMessage}`);
+          return;
+        }
+
+        if (response.assets && response.assets.length > 0) {
+          const asset = response.assets[0];
+          console.log('Photo captured/selected:', asset);
+          Alert.alert('Success', `${action === 'camera' ? 'Photo captured' : 'Photo selected'} successfully!`);
+        } else {
+          Alert.alert('Error', 'No photo was selected or captured');
+        }
+      };
+
+      if (action === 'camera') {
+        launchCamera(options, callback);
+      } else {
+        launchImageLibrary(options, callback);
+      }
+    } catch (error) {
+      console.error(`${action} error:`, error);
+      Alert.alert('Error', `Failed to ${action === 'camera' ? 'take photo' : 'select photo'}: ${error.message}`);
+    }
+  };
+
+  // Show media selection fallback when DocumentPicker is not available
+  const showMediaSelectionFallback = () => {
+    const options = [
+      'Choose from Gallery',
+      'Take Photo',
+      'Cancel'
+    ];
+
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: options,
+          cancelButtonIndex: 2,
+          title: 'Add Content',
+          message: 'Select how you want to add content'
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 0) {
+            handleCameraAction('gallery');
+          } else if (buttonIndex === 1) {
+            handleCameraAction('camera');
+          }
+        }
+      );
+    } else {
+      Alert.alert(
+        'Add Content',
+        'Document picker is currently unavailable. You can still add photos:',
+        [
+          { text: 'Gallery', onPress: () => handleCameraAction('gallery') },
+          { text: 'Camera', onPress: () => handleCameraAction('camera') },
+          { text: 'Cancel', style: 'cancel' }
+        ]
+      );
+    }
+  };
+
+  // Handle the action button press based on the tip type
+  const handleActionPress = () => {
+    if (icon === 'upload' && action === 'Upload now') {
+      handleDocumentUpload();
+    } else if (icon === 'photo' && action === 'Try it') {
+      handleCameraAction('camera');
+    } else {
+      // Default behavior for other actions
+      if (onAction) {
+        onAction();
+      }
+    }
+  };
+
   return (
     <View style={styles.card}>
       <View style={styles.content}>
@@ -25,7 +217,7 @@ const TipCard = ({ icon, title, desc, tag, action, onClose, onAction }) => {
         <CustomText style={styles.description}>{desc}</CustomText>
         <View style={styles.footer}>
           <CustomText style={styles.tag}>{tag}</CustomText>
-          <TouchableOpacity style={styles.actionBtn} onPress={onAction}>
+          <TouchableOpacity style={styles.actionBtn} onPress={handleActionPress}>
             <View style={styles.actionContent}>
               <CustomText style={styles.actionText}>{action}</CustomText>
               <MoveRight size={16} color={colors.primary} style={styles.actionIcon} />

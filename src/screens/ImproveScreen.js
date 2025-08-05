@@ -58,7 +58,7 @@ const tips = [
 const ImproveScreen = () => {
   const [activeTab, setActiveTab] = useState('Improve Tips');
   const [activeTipsTab, setActiveTipsTab] = useState('all');
-  const [showHidden, setShowHidden] = useState(false);
+  const [showHidden, setShowHidden] = useState(true);
 
   const handleTipAction = (tipIndex) => {
     console.log('Tip action clicked:', tipIndex);
@@ -107,7 +107,7 @@ const ImproveScreen = () => {
       <View style={{ flex: 1, backgroundColor: colors.background }}>
         {/* Improve Tips Content */}
         {activeTab === 'Improve Tips' && (
-          <ScrollView style={styles.tipsContainer} contentContainerStyle={{ paddingBottom: 24 }}>
+          <ScrollView style={styles.tipsContainer} contentContainerStyle={{ paddingBottom: 120 }}>
             <ImproveTabs 
               tabs={TABS} 
               activeTab={activeTipsTab} 
@@ -133,7 +133,7 @@ const ImproveScreen = () => {
         )}
         {/* Smart Recommendations Content */}
         {activeTab === 'Smart Recommendations' && (
-          <ScrollView style={styles.tipsContainer} contentContainerStyle={{ paddingBottom: 24 }}>
+          <ScrollView style={styles.tipsContainer} contentContainerStyle={{ paddingBottom: 30 }}>
             {smartRecommendations.map((recommendation, idx) => (
               <RecommendationCard
                 key={idx}
@@ -163,13 +163,11 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: colors.background,
-    paddingTop: 14,
-    marginTop: 15,
   },
   tipsContainer: {
     flex: 1,
     paddingHorizontal: 0,
-    marginTop: 0,
+    marginTop: 30,
   },
 });
 
