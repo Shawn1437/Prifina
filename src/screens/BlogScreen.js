@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { colors } from '../styles';
-import { CustomText } from '../components/common';
+import { CustomText, BottomTabSwitcher } from '../components/common';
 import { Plus } from 'lucide-react-native';
 import DraftsList from '../components/Blog/DraftsList';
 import PublishedList from '../components/Blog/PublishedList';
@@ -93,29 +93,11 @@ const BlogScreen = () => {
           )}
         </ScrollView>
       )}
-      {/* Sticky Bottom Tab Bar */}
-      <View style={styles.bottomButtonContainer}>
-        <View style={styles.segmentedContainer}>
-          <View
-            style={[styles.segmentedBtn, activeTab === 'Drafts' && styles.segmentedBtnActive]}
-            onTouchEnd={() => setActiveTab('Drafts')}
-          >
-            <CustomText style={activeTab === 'Drafts' ? styles.segmentedBtnTextActive : styles.segmentedBtnText}>Drafts</CustomText>
-          </View>
-          <View
-            style={[styles.segmentedBtn, activeTab === 'Published' && styles.segmentedBtnActive]}
-            onTouchEnd={() => setActiveTab('Published')}
-          >
-            <CustomText style={activeTab === 'Published' ? styles.segmentedBtnTextActive : styles.segmentedBtnText}>Published</CustomText>
-          </View>
-          <View
-            style={[styles.segmentedBtn, activeTab === 'Settings' && styles.segmentedBtnActive]}
-            onTouchEnd={() => setActiveTab('Settings')}
-          >
-            <CustomText style={activeTab === 'Settings' ? styles.segmentedBtnTextActive : styles.segmentedBtnText}>Settings</CustomText>
-          </View>
-        </View>
-      </View>
+      <BottomTabSwitcher
+        tabs={['Drafts', 'Published', 'Settings']}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
     </SafeAreaView>
   );
 };
@@ -138,39 +120,6 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     zIndex: 20,
-  },
-  segmentedContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#F4F5F7',
-    borderRadius: 12,
-    padding: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 18,
-  },
-  segmentedBtn: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  segmentedBtnActive: {
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  segmentedBtnText: {
-    color: colors.textSecondary,
-    fontWeight: '500',
-    fontSize: 15,
-  },
-  segmentedBtnTextActive: {
-    color: colors.textPrimary,
-    fontWeight: 'bold',
-    fontSize: 15,
   },
 });
 

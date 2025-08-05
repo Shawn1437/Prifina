@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
 import { colors, spacing } from '../styles';
-import { CustomText, CustomButton } from '../components/common';
+import { CustomText, CustomButton, BottomTabSwitcher } from '../components/common';
 import PinnedQuestions from '../components/AddNew/PinnedQuestions';
 import InputForm from '../components/AddNew/InputForm';
 import InputTypeBar from '../components/AddNew/InputTypeBar';
@@ -91,23 +91,11 @@ const AddNewScreen = () => {
             </View>
           </>
         )}
-        {/* Segmented Tab Bar at the bottom (like ImproveScreen) */}
-        <View style={styles.bottomButtonContainer}>
-          <View style={styles.segmentedContainer}>
-            <View
-              style={[styles.segmentedBtn, activeTab === 'Pinned' && styles.segmentedBtnActive]}
-              onTouchEnd={() => setActiveTab('Pinned')}
-            >
-              <CustomText style={activeTab === 'Pinned' ? styles.segmentedBtnTextActive : styles.segmentedBtnText}>Pinned</CustomText>
-            </View>
-            <View
-              style={[styles.segmentedBtn, activeTab === 'New Entry' && styles.segmentedBtnActive]}
-              onTouchEnd={() => setActiveTab('New Entry')}
-            >
-              <CustomText style={activeTab === 'New Entry' ? styles.segmentedBtnTextActive : styles.segmentedBtnText}>New Entry</CustomText>
-            </View>
-          </View>
-        </View>
+        <BottomTabSwitcher
+          tabs={['Pinned', 'New Entry']}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
       </View>
     </SafeAreaView>
   );
@@ -147,51 +135,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'center',
-  },
-  bottomButtonContainer: {
-    padding: 16,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    marginBottom: -20, // Add a little margin at the bottom (matches ImproveScreen)
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 20,
-  },
-  segmentedContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#F4F5F7',
-    borderRadius: 12,
-    padding: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 18,
-  },
-  segmentedBtn: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  segmentedBtnActive: {
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  segmentedBtnText: {
-    color: colors.textSecondary,
-    fontWeight: '500',
-    fontSize: 15,
-  },
-  segmentedBtnTextActive: {
-    color: colors.textPrimary,
-    fontWeight: 'bold',
-    fontSize: 15,
   },
 });
 

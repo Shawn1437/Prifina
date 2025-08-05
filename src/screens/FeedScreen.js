@@ -9,7 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Pin, Clock4, MessageSquare } from 'lucide-react-native';
 import { colors, spacing } from '../styles';
-import { CustomText } from '../components/common';
+import { CustomText, BottomTabSwitcher } from '../components/common';
 import { FeedPost } from '../components/feed';
 import { mockPosts } from '../data';
 import SessionCard from '../components/feed/SessionCard';
@@ -133,23 +133,11 @@ const FeedScreen = () => {
 
 
 
-      {/* Segmented Tab Bar at the bottom (like ImproveScreen) */}
-      <View style={styles.bottomButtonContainer}>
-        <View style={styles.segmentedContainer}>
-          <View
-            style={[styles.segmentedBtn, activeTab === 'Live Feed' && styles.segmentedBtnActive]}
-            onTouchEnd={() => setActiveTab('Live Feed')}
-          >
-            <CustomText style={activeTab === 'Live Feed' ? styles.segmentedBtnTextActive : styles.segmentedBtnText}>Live Feed</CustomText>
-          </View>
-          <View
-            style={[styles.segmentedBtn, activeTab === 'Sessions' && styles.segmentedBtnActive]}
-            onTouchEnd={() => setActiveTab('Sessions')}
-          >
-            <CustomText style={activeTab === 'Sessions' ? styles.segmentedBtnTextActive : styles.segmentedBtnText}>Sessions</CustomText>
-          </View>
-        </View>
-      </View>
+      <BottomTabSwitcher
+        tabs={['Live Feed', 'Sessions']}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
     </SafeAreaView>
   );
 };

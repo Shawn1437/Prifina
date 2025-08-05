@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { colors, spacing } from '../styles';
-import { CustomText } from '../components/common';
+import { BottomTabSwitcher } from '../components/common';
 import { 
   ImproveTabs, 
   TipCard, 
   HiddenSuggestionsSection, 
-  RecommendationCard, 
-  ImproveTabBar 
+  RecommendationCard 
 } from '../components/improvement';
 
 const TABS = [
@@ -151,9 +150,10 @@ const ImproveScreen = () => {
           </ScrollView>
         )}
       </View>
-      <ImproveTabBar 
-        activeTab={activeTab} 
-        onTabChange={setActiveTab} 
+      <BottomTabSwitcher
+        tabs={['Improve Tips', 'Smart Recommendations']}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
       />
     </SafeAreaView>
   );
