@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, StyleSheet, TouchableOpacity, LayoutAnimation, Platform, UIManager, Animated } from 'react-native';
 import { colors, spacing } from '../../styles';
 import CustomText from './CustomText';
-import CustomButton from './CustomButton';
 import { Pin, Plus, ChevronDown, ChevronUp } from 'lucide-react-native';
+
+// Enable LayoutAnimation on Android
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const KnowledgeCard = ({
   title,
@@ -15,10 +19,46 @@ const KnowledgeCard = ({
   onUnpin,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const chevronRotation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(chevronRotation, {
+      toValue: isExpanded ? 1 : 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [isExpanded]);
 
   const handleCardPress = () => {
+    LayoutAnimation.configureNext({
+      duration: 400,
+      create: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+      update: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.scaleXY,
+      },
+      delete: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+    });
     setIsExpanded(!isExpanded);
   };
+
+  const chevronStyle = {
+    transform: [
+      {
+        rotate: chevronRotation.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['0deg', '180deg'],
+        }),
+      },
+    ],
+  };
+
   return (
     <TouchableOpacity style={styles.card} onPress={handleCardPress} activeOpacity={0.7}>
       <View style={styles.header}>
@@ -26,11 +66,9 @@ const KnowledgeCard = ({
           {title}
         </CustomText>
         <View style={styles.iconContainer}>
-          {isExpanded ? (
-            <ChevronUp size={20} color={colors.textSecondary} style={styles.chevronIcon} />
-          ) : (
-            <ChevronDown size={20} color={colors.textSecondary} style={styles.chevronIcon} />
-          )}
+          <Animated.View style={[styles.chevronContainer, chevronStyle]}>
+            <ChevronDown size={20} color={colors.textSecondary} />
+          </Animated.View>
           {pinned && (
             <TouchableOpacity onPress={(e) => {
               e.stopPropagation();
@@ -86,7 +124,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 12,
     padding: spacing.lg,
-    marginVertical: spacing.sm,
+    marginVertical: 8,
     marginHorizontal: spacing.cardMargin,
     shadowColor: colors.black,
     shadowOffset: { width: 0, height: 2 },
@@ -108,16 +146,15 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
-  chevronIcon: {
+  chevronContainer: {
+    padding: spacing.xs,
     marginBottom: spacing.xs,
-    marginLeft: spacing.sm,
   },
   pinContainer: {
     padding: spacing.xs,
     borderRadius: 4,
   },
   pinIcon: {
-    marginLeft: spacing.sm,
     marginTop: 2,
   },
   description: {

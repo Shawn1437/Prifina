@@ -1,26 +1,76 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { Pin, Clock4, MessageSquare } from 'lucide-react-native';
+import { View, TouchableOpacity, StyleSheet, LayoutAnimation, Platform, UIManager, Animated } from 'react-native';
+import { Pin, Clock4, MessageSquare, ChevronDown, ChevronUp } from 'lucide-react-native';
 import { colors, spacing } from '../../styles';
 import { CustomText } from '../common';
+
+// Enable LayoutAnimation on Android
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const SessionCard = ({
   session,
   expanded,
   onToggleExpand,
 }) => {
+  const chevronRotation = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    Animated.timing(chevronRotation, {
+      toValue: expanded ? 1 : 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
+  }, [expanded]);
+
+  const handleToggleExpand = () => {
+    LayoutAnimation.configureNext({
+      duration: 400,
+      create: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+      update: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.scaleXY,
+      },
+      delete: {
+        type: LayoutAnimation.Types.easeInEaseOut,
+        property: LayoutAnimation.Properties.opacity,
+      },
+    });
+    onToggleExpand();
+  };
+
+  const chevronStyle = {
+    transform: [
+      {
+        rotate: chevronRotation.interpolate({
+          inputRange: [0, 1],
+          outputRange: ['0deg', '180deg'],
+        }),
+      },
+    ],
+  };
+
   return (
     <TouchableOpacity
       activeOpacity={0.95}
-      onPress={onToggleExpand}
+      onPress={handleToggleExpand}
       style={styles.sessionCard}
     >
       {/* Session header */}
       <View style={styles.sessionHeader}>
         <CustomText style={styles.sessionTitle}>{session.title}</CustomText>
-        {session.isPinned && (
-          <Pin size={18} color="#3B82F6" style={styles.pinIconContainer} />
-        )}
+        <View style={styles.headerIcons}>
+          {session.isPinned && (
+            <Pin size={18} color="#3B82F6" style={styles.pinIconContainer} />
+          )}
+          <Animated.View style={[styles.chevronContainer, chevronStyle]}>
+            <ChevronDown size={20} color="#888" />
+          </Animated.View>
+        </View>
       </View>
       {/* Session meta */}
       <View style={styles.sessionMeta}>
@@ -80,6 +130,7 @@ const styles = StyleSheet.create({
   sessionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 2,
   },
   sessionTitle: {
@@ -87,8 +138,15 @@ const styles = StyleSheet.create({
     fontSize: 17,
     flex: 1,
   },
+  headerIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   pinIconContainer: {
-    marginLeft: 8,
+    marginRight: 8,
+  },
+  chevronContainer: {
+    padding: 4,
   },
   sessionMeta: {
     flexDirection: 'row',

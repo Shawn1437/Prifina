@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { scale, verticalScale } from 'react-native-size-matters';
 import { colors } from '../styles';
 import MetricsRow from '../components/Usage/MetricsRow';
 import ChartCard from '../components/Usage/ChartCard';
@@ -63,7 +64,7 @@ const UsageScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        contentContainerStyle={{ padding: 20 }}
+        contentContainerStyle={{ padding: scale(20) }}
         showsVerticalScrollIndicator={false}
         bounces={false}
         alwaysBounceHorizontal={false}
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    marginTop:0
+    paddingTop: verticalScale(8),
   },
 });
 

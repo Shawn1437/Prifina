@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { scale, verticalScale } from 'react-native-size-matters';
 import { colors } from '../styles';
 import { BottomTabSwitcher } from '../components/common';
 import DraftsList from '../components/Blog/DraftsList';
@@ -65,7 +67,7 @@ const BlogScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       {activeTab === 'Settings' ? (
-        <ScrollView contentContainerStyle={{ paddingBottom: 20,marginHorizontal:16 ,paddingTop: 16 }} showsVerticalScrollIndicator={false}>
+        <ScrollView contentContainerStyle={{ paddingBottom: verticalScale(20), marginHorizontal: scale(16), paddingTop: verticalScale(16) }} showsVerticalScrollIndicator={false}>
           <SettingsCard
             enableBlogging={enableBlogging}
             setEnableBlogging={setEnableBlogging}
@@ -83,7 +85,7 @@ const BlogScreen = () => {
           />
         </ScrollView>
       ) : (
-        <ScrollView contentContainerStyle={{ paddingBottom: 90 }} showsVerticalScrollIndicator={false}>
+        <ScrollView contentContainerStyle={{ paddingBottom: verticalScale(90) }} showsVerticalScrollIndicator={false}>
           {activeTab === 'Drafts' && (
             <DraftsList drafts={mockDrafts} styles={styles} />
           )}
@@ -105,7 +107,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    marginTop: 0,
+    paddingTop: verticalScale(8),
   },
 });
 

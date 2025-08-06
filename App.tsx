@@ -6,6 +6,7 @@
  */
 
 import React, { useState } from 'react';
+import useAppStore from './src/store/appStore';
 import { StatusBar, useColorScheme, LogBox } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -39,6 +40,22 @@ if (__DEV__) {
 }
 
 function App() {
+  // Zustand state usage example
+  const count = useAppStore((state: { count: number }) => state.count);
+  const increase = useAppStore((state: { increase: () => void }) => state.increase);
+  const decrease = useAppStore((state: { decrease: () => void }) => state.decrease);
+  // Log to console for test
+  console.log('Zustand count:', count);
+
+  // Directly increment count on mount for testing
+  React.useEffect(() => {
+    increase();
+    setTimeout(() => {
+      // Log again after increment
+      console.log('Zustand count after increase:', useAppStore.getState().count);
+    }, 100);
+    // eslint-disable-next-line
+  }, []);
   const [showSplash, setShowSplash] = useState(true);
   const [appReady, setAppReady] = useState(false);
   const isDarkMode = useColorScheme() === 'dark';
@@ -81,6 +98,13 @@ function App() {
         {showSplash && (
           <SplashScreen onAnimationEnd={handleSplashEnd} />
         )}
+        {/* Example buttons to test Zustand actions in UI (optional, remove if not needed) */}
+        {/*
+        <View style={{ position: 'absolute', bottom: 40, left: 20 }}>
+          <Button title="Increase" onPress={increase} />
+          <Button title="Decrease" onPress={decrease} />
+        </View>
+        */}
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
+import { View, StyleSheet, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import { colors, spacing } from '../styles';
 import { CustomButton, BottomTabSwitcher } from '../components/common';
 import PinnedQuestions from '../components/AddNew/PinnedQuestions';
@@ -108,32 +110,32 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingTop: spacing.lg, // Add more top padding to prevent content from hiding under notch
+    paddingTop: verticalScale(16),
   },
   bottomEntryBar: {
     backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 18,
+    paddingHorizontal: scale(20),
+    paddingTop: verticalScale(8),
+    paddingBottom: verticalScale(18),
     borderTopWidth: 1,
     borderTopColor: '#eee',
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 60,
+    bottom: verticalScale(60),
     zIndex: 15,
   },
   saveButton: {
-    marginTop: 10,
-    marginBottom: 24,
+    marginTop: verticalScale(10),
+    marginBottom: verticalScale(24),
     backgroundColor: '#E5E7EB',
-    borderRadius: 8,
-    paddingVertical: 14,
+    borderRadius: scale(8),
+    paddingVertical: verticalScale(14),
   },
   saveButtonText: {
     color: '#A1A1AA',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: moderateScale(16),
     textAlign: 'center',
   },
 });

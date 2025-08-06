@@ -108,7 +108,7 @@ const FeedScreen = () => {
           data={posts}
           renderItem={renderPost}
           keyExtractor={item => item.id}
-          contentContainerStyle={[styles.listContainer, { paddingBottom: 90 }]}
+          contentContainerStyle={[styles.listContainer, { paddingBottom: 40 }]}
           refreshControl={ 
             <RefreshControl
               refreshing={refreshing}
