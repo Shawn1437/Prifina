@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import { Modal, TouchableOpacity, Pressable } from 'react-native';
 import {
   View,
   FlatList,
@@ -7,9 +6,8 @@ import {
   RefreshControl,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Pin, Clock4, MessageSquare } from 'lucide-react-native';
 import { colors, spacing } from '../styles';
-import { CustomText, BottomTabSwitcher } from '../components/common';
+import { BottomTabSwitcher } from '../components/common';
 import { FeedPost } from '../components/feed';
 import { mockPosts } from '../data';
 import SessionCard from '../components/feed/SessionCard';
@@ -147,46 +145,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingVertical: spacing.sm,
-  },
-  bottomButtonContainer: {
-    padding: 16,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    marginBottom: -20, // Add a little margin at the bottom
-  },
-  segmentedContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#F4F5F7',
-    borderRadius: 12,
-    padding: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 18,
-  },
-  segmentedBtn: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  segmentedBtnActive: {
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  segmentedBtnText: {
-    color: colors.textSecondary,
-    fontWeight: '500',
-    fontSize: 15,
-  },
-  segmentedBtnTextActive: {
-    color: colors.textPrimary,
-    fontWeight: 'bold',
-    fontSize: 15,
   },
 });
 

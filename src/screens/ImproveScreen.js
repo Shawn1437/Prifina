@@ -133,7 +133,7 @@ const ImproveScreen = () => {
         )}
         {/* Smart Recommendations Content */}
         {activeTab === 'Smart Recommendations' && (
-          <ScrollView style={styles.tipsContainer} contentContainerStyle={{ paddingBottom: 30 }}>
+          <ScrollView style={styles.tipsContainer} contentContainerStyle={{ paddingBottom: 90 }}>
             {smartRecommendations.map((recommendation, idx) => (
               <RecommendationCard
                 key={idx}

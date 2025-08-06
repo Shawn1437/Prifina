@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { colors } from '../styles';
-import { CustomText, BottomTabSwitcher } from '../components/common';
-import { Plus } from 'lucide-react-native';
+import { BottomTabSwitcher } from '../components/common';
 import DraftsList from '../components/Blog/DraftsList';
 import PublishedList from '../components/Blog/PublishedList';
 import SettingsCard from '../components/Blog/SettingsCard';
@@ -106,20 +105,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    // marginTop:40 // removed to avoid extra top space
-    marginTop: 30,
-  },
-  bottomButtonContainer: {
-    padding: 16,
-    backgroundColor: '#fff',
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-    marginBottom: -20,
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 20,
+    marginTop: 0,
   },
 });
 

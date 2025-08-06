@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, SafeAreaView, StatusBar } from 'react-native';
 import { colors, spacing } from '../styles';
-import { CustomText, CustomButton, BottomTabSwitcher } from '../components/common';
+import { CustomButton, BottomTabSwitcher } from '../components/common';
 import PinnedQuestions from '../components/AddNew/PinnedQuestions';
 import InputForm from '../components/AddNew/InputForm';
 import InputTypeBar from '../components/AddNew/InputTypeBar';

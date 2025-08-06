@@ -20,7 +20,7 @@ const PublishedList = ({ published }) => (
     ))}
   </View>
 );
-
+ 
 const styles = StyleSheet.create({
   draftsList: {
     // Add vertical padding if needed

@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { colors } from '../styles';
-import { CustomText } from '../components/common';
 import MetricsRow from '../components/Usage/MetricsRow';
 import ChartCard from '../components/Usage/ChartCard';
 import QualityCard from '../components/Usage/QualityCard';
@@ -80,7 +79,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    marginTop:30
+    marginTop:0
   },
 });
 
