@@ -112,6 +112,7 @@ const ImproveScreen = () => {
               tabs={TABS} 
               activeTab={activeTipsTab} 
               onTabChange={setActiveTipsTab} 
+              
             />
             {tips.map((tip, idx) => (
               <TipCard

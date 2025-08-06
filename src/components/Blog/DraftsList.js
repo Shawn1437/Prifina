@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CustomText, CustomButton } from '../common';
 import { CreditCard, Send, Trash2 } from 'lucide-react-native';
+import { colors } from '../../styles';
 
 const DraftsList = ({ drafts }) => (
   <View style={styles.draftsList}>
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   tag: {
-    backgroundColor: '#E0E7FF',
+    backgroundColor: colors.tagsbg,
     borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 2,
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   tagText: {
-    color: '#2563EB',
+    color: colors.tagsText,
     fontSize: 12,
   },
   type: {

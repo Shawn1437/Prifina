@@ -4,8 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Radio,
   Plus,
-  FileText,
-  TrendingUp,
+  BookText,
+  Activity,
   Settings,
 } from 'lucide-react-native';
 import { colors, spacing } from '../../styles';
@@ -24,9 +24,9 @@ const BottomTabBar = ({ state, descriptors, navigation }) => {
       case 'AddNew':
         return <Plus size={iconSize} color={iconColor} />;
       case 'Blog':
-        return <FileText size={iconSize} color={iconColor} />;
+        return <BookText size={iconSize} color={iconColor} />;
       case 'Usage':
-        return <TrendingUp size={iconSize} color={iconColor} />;
+        return <Activity size={iconSize} color={iconColor} />;
       case 'Improve':
         return <Settings size={iconSize} color={iconColor} />;
       default:

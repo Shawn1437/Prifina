@@ -12,6 +12,7 @@ import { FeedPost } from '../components/feed';
 import { mockPosts } from '../data';
 import SessionCard from '../components/feed/SessionCard';
 
+
 // Example mock data for sessions
 const mockSessions = [
   {
@@ -108,7 +109,7 @@ const FeedScreen = () => {
           renderItem={renderPost}
           keyExtractor={item => item.id}
           contentContainerStyle={[styles.listContainer, { paddingBottom: 90 }]}
-          refreshControl={
+          refreshControl={ 
             <RefreshControl
               refreshing={refreshing}
               onRefresh={onRefresh}
@@ -117,6 +118,9 @@ const FeedScreen = () => {
             />
           }
           showsVerticalScrollIndicator={false}
+           bounces={false}
+      alwaysBounceVertical={false}
+      alwaysBounceHorizontal={false}
         />
       )}
       {activeTab === 'Sessions' && (

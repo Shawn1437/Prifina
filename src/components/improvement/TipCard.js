@@ -75,15 +75,19 @@ const TipCard = ({ icon, title, desc, tag, action, onClose, onAction }) => {
         console.log('Document uploaded:', file);
       }
     } catch (error) {
-      console.error('Document upload error:', error);
-
-      if (error.code === 'DOCUMENT_PICKER_CANCELED') {
-        console.log('User cancelled document selection');
+      // If user cancelled or did nothing, do nothing (no alert, no fallback, no log)
+      if (
+        error.code === 'DOCUMENT_PICKER_CANCELED' ||
+        error.message?.toLowerCase().includes('cancel') ||
+        error.message?.toLowerCase().includes('user cancelled') ||
+        error.message?.toLowerCase().includes('user canceled')
+      ) {
         return;
       }
 
+      // Only log and show fallback for real errors
       if (error.message) {
-        console.log('DocumentPicker error, showing fallback:', error.message);
+        console.error('DocumentPicker error:', error.message);
         showMediaSelectionFallback();
         return;
       }

@@ -34,6 +34,9 @@ const PinnedQuestions = ({ pinnedQuestions, onAddKnowledge, onUnpin, styles }) =
       keyExtractor={item => item.id}
       contentContainerStyle={[styles.listContent, { paddingBottom: 90 }]}
       showsVerticalScrollIndicator={false}
+      bounces={false}
+      alwaysBounceVertical={false}
+      alwaysBounceHorizontal={false}
     />
   );
 };
