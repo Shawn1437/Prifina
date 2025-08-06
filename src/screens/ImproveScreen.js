@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
   tipsContainer: {
     flex: 1,
     paddingHorizontal: 0,
-    marginTop: 30,
+    marginTop: 0,
   },
 });
 

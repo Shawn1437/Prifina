@@ -1,0 +1,12 @@
+<svg width="400" height="120" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+  <!-- Professional PRIFINA Logo -->
+  <text x="200" y="70" 
+        font-family="Inter, Arial, sans-serif" 
+        font-size="48" 
+        font-weight="700" 
+        text-anchor="middle" 
+        fill="#000000" 
+        letter-spacing="4">
+    PRIFINA
+  </text>
+</svg>
