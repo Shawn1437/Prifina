@@ -1,0 +1,155 @@
+import React, { useState, useCallback } from 'react';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  RefreshControl,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { colors, spacing } from '../styles';
+import { BottomTabSwitcher } from '../components/common';
+import { FeedPost } from '../components/feed';
+import { mockPosts } from '../data';
+import SessionCard from '../components/feed/SessionCard';
+
+
+// Example mock data for sessions
+const mockSessions = [
+  {
+    id: 'session1',
+    title: 'Startup Fundraising Strategy',
+    messages: 6,
+    time: '12m',
+    isPinned: true,
+    hearts: 8,
+    thumbsUp: 4,
+  },
+  {
+    id: 'session2',
+    title: 'Product Management Fundamentals',
+    messages: 4,
+    time: '8m',
+    isPinned: false,
+    hearts: 6,
+    thumbsUp: 2,
+  },
+];
+
+
+const FeedScreen = () => {
+  const [posts, setPosts] = useState(mockPosts);
+  const [refreshing, setRefreshing] = useState(false);
+  const [activeTab, setActiveTab] = useState('Live Feed');
+  const [expandedSessionIds, setExpandedSessionIds] = useState([]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    // Simulate API call
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  }, []);
+
+  const handlePostPress = post => {
+    console.log('Post pressed:', post.title);
+  };
+
+  const handleBookmarkPress = postId => {
+    setPosts(prevPosts =>
+      prevPosts.map(post =>
+        post.id === postId
+          ? { ...post, isBookmarked: !post.isBookmarked }
+          : post,
+      ),
+    );
+  };
+
+  const handleHeartPress = (postId, isActive) => {
+    console.log('Heart pressed:', postId, isActive);
+  };
+
+  const handleThumbsUpPress = (postId, isActive) => {
+    console.log('Thumbs up pressed:', postId, isActive);
+  };
+
+  const renderPost = ({ item }) => (
+    <FeedPost
+      post={item}
+      onPress={handlePostPress}
+      onBookmarkPress={handleBookmarkPress}
+      onHeartPress={handleHeartPress}
+      onThumbsUpPress={handleThumbsUpPress}
+    />
+  )
+
+  // Render for sessions cards (custom layout based on screenshot)
+  const renderSession = ({ item }) => {
+    const expanded = expandedSessionIds.includes(item.id);
+    const toggleExpand = () => {
+      setExpandedSessionIds(prev =>
+        prev.includes(item.id)
+          ? prev.filter(id => id !== item.id)
+          : [...prev, item.id]
+      );
+    };
+    return (
+      <SessionCard
+        session={item}
+        expanded={expanded}
+        onToggleExpand={toggleExpand}
+      />
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.container} edges={['top']}>
+      {activeTab === 'Live Feed' && (
+        <FlatList
+          data={posts}
+          renderItem={renderPost}
+          keyExtractor={item => item.id}
+          contentContainerStyle={[styles.listContainer, { paddingBottom: 40 }]}
+          refreshControl={ 
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={colors.primary}
+              colors={[colors.primary]}
+            />
+          }
+          showsVerticalScrollIndicator={false}
+           bounces={false}
+      alwaysBounceVertical={false}
+      alwaysBounceHorizontal={false}
+        />
+      )}
+      {activeTab === 'Sessions' && (
+        <FlatList
+          data={mockSessions}
+          renderItem={renderSession}
+          keyExtractor={item => item.id}
+          contentContainerStyle={[styles.listContainer, { paddingBottom: 100 }]}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+
+      <BottomTabSwitcher
+        tabs={['Live Feed', 'Sessions']}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  listContainer: {
+    paddingVertical: spacing.sm,
+  },
+});
+
+export default FeedScreen;

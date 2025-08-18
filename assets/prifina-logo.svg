@@ -1,0 +1,29 @@
+<svg width="400" height="100" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#cccccc;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- PRIFINA Text -->
+  <text x="200" y="60" 
+        font-family="Arial, sans-serif" 
+        font-size="36" 
+        font-weight="bold" 
+        text-anchor="middle" 
+        fill="url(#gradient)" 
+        letter-spacing="3">
+    PRIFINA
+  </text>
+  
+  <!-- Tagline -->
+  <text x="200" y="80" 
+        font-family="Arial, sans-serif" 
+        font-size="12" 
+        text-anchor="middle" 
+        fill="#888888" 
+        letter-spacing="1">
+    YOUR PERSONAL AI TWIN
+  </text>
+</svg>
